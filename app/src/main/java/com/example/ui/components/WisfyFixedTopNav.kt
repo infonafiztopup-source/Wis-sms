@@ -160,7 +160,7 @@ fun WisfyFixedTopNav(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = if (isDaemonActive) "TLS 1.3 SECURE" else "STANDBY",
+                                text = if (isDaemonActive) "GATEWAY ACTIVE" else "STANDBY",
                                 fontSize = 9.sp,
                                 fontFamily = FontFamily.Monospace,
                                 fontWeight = FontWeight.Bold,
