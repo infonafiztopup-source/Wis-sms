@@ -121,7 +121,6 @@ enum class NavigationTab {
 }
 
 @Composable
-@Composable
 fun WisfyAppRoot(viewModel: WisfyViewModel) {
     var showSplash by remember { mutableStateOf(true) }
     androidx.compose.runtime.LaunchedEffect(Unit) {
