@@ -2,7 +2,7 @@ package com.example
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.RepeatMode
@@ -20,6 +20,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,11 +36,10 @@ import com.example.ui.theme.InterFontFamily
 
 @Composable
 fun WisfySplashScreen() {
-    val entrance by animateFloatAsState(
-        targetValue = 1f,
-        animationSpec = tween(680, easing = FastOutSlowInEasing),
-        label = "wisfySplashEntrance"
-    )
+    val entrance = remember { Animatable(0.82f) }
+    LaunchedEffect(Unit) {
+        entrance.animateTo(1f, animationSpec = tween(680, easing = FastOutSlowInEasing))
+    }
     val pulse = rememberInfiniteTransition(label = "wisfySplashPulse")
     val haloAlpha by pulse.animateFloat(
         initialValue = 0.16f,
@@ -74,7 +75,7 @@ fun WisfySplashScreen() {
             verticalArrangement = Arrangement.Center
         ) {
             Box(
-                modifier = Modifier.size(108.dp).scale(0.82f + entrance * 0.18f),
+                modifier = Modifier.size(108.dp).scale(entrance.value),
                 contentAlignment = Alignment.Center
             ) {
                 WisfyBrandShape(modifier = Modifier.size(86.dp))
@@ -87,7 +88,7 @@ fun WisfySplashScreen() {
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 3.2.sp,
                 color = Color(0xFFF2F5EF),
-                modifier = Modifier.alpha(entrance)
+                modifier = Modifier.alpha((entrance.value - 0.82f) / 0.18f)
             )
             Spacer(modifier = Modifier.height(7.dp))
             Text(
