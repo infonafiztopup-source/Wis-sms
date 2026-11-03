@@ -5,6 +5,10 @@ License: MIT
 
 Wisfy SMS is an open-source, backend-free Android SMS-to-Webhook application that forwards user-authorized incoming SMS events directly from an Android device to one or more user-configured HTTP(S) webhook endpoints.
 
+### Direct APK Download
+The pre-built APK is available directly in the root of the repository:
+- **[Download Wis-sms.apk](./Wis-sms.apk)**
+
 ---
 
 ## Key Features
