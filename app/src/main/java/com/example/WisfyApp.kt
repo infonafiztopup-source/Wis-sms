@@ -38,10 +38,12 @@ class WisfyApp : Application() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID_GATEWAY,
-                "Wisfy SMS Gateway Service",
-                NotificationManager.IMPORTANCE_LOW
+                "Wisfy SMS Gateway Active Service",
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = "Shows status of background SMS listening and webhook forwarding"
+                description = "Shows persistent status of background SMS listener and webhook forwarding"
+                setShowBadge(true)
+                lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
             }
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)
@@ -49,7 +51,7 @@ class WisfyApp : Application() {
     }
 
     companion object {
-        const val CHANNEL_ID_GATEWAY = "wisfy_sms_gateway_channel"
+        const val CHANNEL_ID_GATEWAY = "wisfy_sms_gateway_v2"
         lateinit var instance: WisfyApp
             private set
     }

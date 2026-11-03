@@ -302,6 +302,13 @@ class WisfyRepository(private val context: Context) {
             return ProcessResult.NoMatchingEndpoints(eventId)
         }
 
+        // Update persistent notification with active forwarding status
+        com.example.service.WisfyForegroundService.updateStatus(
+            context,
+            "Wisfy SMS • Forwarding...",
+            "From $sender -> Dispatched to ${matchingEndpoints.size} endpoint(s)"
+        )
+
         // Dispatch to each matching endpoint concurrently and await completion before returning
         coroutineScope {
             matchingEndpoints.map { ep ->
@@ -343,6 +350,13 @@ class WisfyRepository(private val context: Context) {
                 }
             }.awaitAll()
         }
+
+        // Restore notification back to idle listening state with last event summary
+        com.example.service.WisfyForegroundService.updateStatus(
+            context,
+            "Wisfy SMS Gateway • Active",
+            "Last event: $sender (${parsed.provider}) -> Dispatched"
+        )
 
         return ProcessResult.Dispatched(eventId, matchingEndpoints.size)
     }

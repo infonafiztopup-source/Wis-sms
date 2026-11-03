@@ -90,7 +90,10 @@ class WisfyForegroundService : Service() {
         }
     }
 
-    private fun createNotification(): Notification {
+    private fun createNotification(
+        title: String = "Wisfy SMS Gateway • Active",
+        text: String = "Running in background • Ready to forward incoming SMS"
+    ): Notification {
         val openIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
@@ -102,12 +105,17 @@ class WisfyForegroundService : Service() {
         )
 
         return NotificationCompat.Builder(this, WisfyApp.CHANNEL_ID_GATEWAY)
-            .setContentTitle("Wisfy SMS Gateway Active")
-            .setContentText("Local-first SMS daemon monitoring incoming events")
+            .setContentTitle(title)
+            .setContentText(text)
+            .setSubText("Running in background")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setShowWhen(true)
             .build()
     }
 
@@ -115,6 +123,37 @@ class WisfyForegroundService : Service() {
         const val NOTIFICATION_ID = 1001
         const val ACTION_START = "com.example.service.START"
         const val ACTION_STOP = "com.example.service.STOP"
+
+        fun updateStatus(context: Context, title: String, text: String) {
+            try {
+                val openIntent = Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                }
+                val pendingIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    openIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
+                val notification = NotificationCompat.Builder(context, WisfyApp.CHANNEL_ID_GATEWAY)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setSubText("Running in background")
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentIntent(pendingIntent)
+                    .setOngoing(true)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+                    .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                    .setShowWhen(true)
+                    .build()
+
+                val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+                manager.notify(NOTIFICATION_ID, notification)
+            } catch (_: Exception) {}
+        }
 
         fun start(context: Context) {
             try {
