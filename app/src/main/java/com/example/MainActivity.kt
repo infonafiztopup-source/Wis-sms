@@ -450,13 +450,13 @@ private fun BottomNavItem(
                     Brush.verticalGradient(
                         if (isDark) {
                             listOf(
-                                Color(0xFF10B981),
-                                Color(0xFF059669)
+                                Color(0xFF34D399),
+                                Color(0xFF087F5B)
                             )
                         } else {
                             listOf(
-                                Color(0xFF0F172A),
-                                Color(0xFF1E293B)
+                                Color(0xFF202A23),
+                                Color(0xFF141C17)
                             )
                         }
                     )
