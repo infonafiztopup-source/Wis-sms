@@ -247,8 +247,8 @@ fun WisfyButton(
 @Composable
 fun WisfyCard(
     modifier: Modifier = Modifier,
-    cornerRadius: Dp = 16.dp,
-    elevation: Dp = 0.dp,
+    cornerRadius: Dp = 18.dp,
+    elevation: Dp = 1.dp,
     borderColor: Color = WarmBorder,
     backgroundColor: Color = WarmSurfaceCard,
     onClick: (() -> Unit)? = null,
