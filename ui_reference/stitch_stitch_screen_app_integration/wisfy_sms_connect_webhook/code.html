@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Connect Webhook - Wisfy</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "obsidian": "#14171A",
+            "obsidian-muted": "#2F3336",
+            "canvas": "#F9F9F7",
+            "card-border": "#EBEAE5",
+            "surface-subtle": "#F2F1ED",
+            "primary": "#14171A",
+            "surface": "#F9F9F7",
+            "background": "#F9F9F7",
+            "on-surface": "#14171A",
+            "on-surface-variant": "#65676B",
+            "outline": "#75777B",
+            "outline-variant": "#EBEAE5",
+            "surface-container-lowest": "#FFFFFF",
+            "surface-container-low": "#F4F3F0",
+            "surface-container": "#EEEEEC",
+            "success": "#166534",
+            "success-bg": "#DCFCE7",
+            "success-border": "#BBF7D0",
+            "secondary-accent": "#845400"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "margin": "1.25rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "sans": ["Plus Jakarta Sans", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    .shadow-warm-card {
+      box-shadow: 0 1px 3px 0 rgba(20, 23, 26, 0.04), 0 1px 2px -1px rgba(20, 23, 26, 0.02);
+    }
+    .shadow-obsidian-subtle {
+      box-shadow: 0 4px 14px 0 rgba(20, 23, 26, 0.22);
+    }
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-canvas text-on-surface antialiased min-h-screen flex flex-col justify-between items-center selection:bg-obsidian selection:text-white">
+<!-- Mobile Viewport Wrapper (<600px Max-Width Canvas) -->
+<div class="w-full max-w-lg mx-auto min-h-screen flex flex-col px-margin pb-8 pt-4">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between h-14 w-full">
+<button aria-label="Go back" class="w-10 h-10 rounded-full bg-white border border-card-border flex items-center justify-center text-obsidian active:scale-95 transition-transform duration-150 shadow-warm-card" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<!-- Live Heartbeat Indicator -->
+<div class="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-full border border-card-border shadow-warm-card">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+</span>
+<span class="font-mono text-[11px] font-semibold tracking-wider text-emerald-800">TLS 1.3 SECURE</span>
+</div>
+</header>
+<!-- Header Headline Group -->
+<section class="mt-4 mb-5">
+<div class="flex items-center gap-2 mb-1.5">
+<span class="material-symbols-outlined text-obsidian text-[20px]">webhook</span>
+<span class="font-mono text-[11px] font-bold text-obsidian uppercase tracking-wider">Gateway Dispatch</span>
+</div>
+<h1 class="text-[28px] font-extrabold text-obsidian tracking-tight leading-tight">Connect Webhook</h1>
+<p class="text-[14px] text-on-surface-variant mt-1 leading-snug">
+  Link your Android device directly to your server or e-commerce store
+</p>
+</section>
+<!-- Tab Selector Pills (Obsidian Active Pill) -->
+<div class="bg-surface-subtle p-1 rounded-full flex items-center mb-6 border border-card-border">
+<button class="flex-1 py-2 px-4 rounded-full bg-obsidian text-white font-semibold text-[13px] shadow-sm flex items-center justify-center gap-2 transition-all" type="button">
+<span class="material-symbols-outlined text-[17px] text-white">tune</span>
+<span>Manual Config</span>
+</button>
+<button class="flex-1 py-2 px-4 rounded-full text-on-surface-variant font-medium text-[13px] flex items-center justify-center gap-2 hover:text-obsidian transition-colors" type="button">
+<span class="material-symbols-outlined text-[17px]">qr_code_scanner</span>
+<span>Scan QR Code</span>
+</button>
+</div>
+<!-- Main Config Form Card -->
+<form class="space-y-4 flex-grow">
+<!-- 1. Endpoint Name -->
+<div>
+<label class="block text-[13px] font-semibold text-obsidian mb-1.5" for="endpoint_name">
+  Endpoint Name
+</label>
+<div class="relative flex items-center">
+<input class="w-full h-[50px] px-4 rounded-xl bg-white border border-card-border text-[14px] text-obsidian placeholder-on-surface-variant/50 focus:outline-none focus:border-obsidian focus:ring-1 focus:ring-obsidian transition-all shadow-warm-card" id="endpoint_name" placeholder="e.g. Production Store Gateway" type="text" value="Production Merchant API"/>
+<span class="material-symbols-outlined absolute right-4 text-on-surface-variant/70 text-[20px]">badge</span>
+</div>
+</div>
+<!-- 2. Webhook URL -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="text-[13px] font-semibold text-obsidian" for="webhook_url">
+  Webhook URL
+</label>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-mono text-[10px] font-semibold border border-emerald-200">
+<span class="material-symbols-outlined text-[11px] text-emerald-700">lock</span>
+  HTTPS Enforced
+</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full h-[50px] pl-4 pr-11 rounded-xl bg-white border border-card-border font-mono text-[12px] text-obsidian font-medium focus:outline-none focus:border-obsidian focus:ring-1 focus:ring-obsidian transition-all shadow-warm-card" id="webhook_url" type="url" value="https://store.example.com/api/webhooks/wisfy-sms"/>
+<span class="material-symbols-outlined absolute right-4 text-emerald-600 text-[20px]">verified</span>
+</div>
+</div>
+<!-- 3. Authentication Header -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="text-[13px] font-semibold text-obsidian" for="bearer_token">
+  Authentication Header
+</label>
+<span class="font-mono text-[11px] text-on-surface-variant">Bearer Token</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full h-[50px] pl-4 pr-12 rounded-xl bg-white border border-card-border font-mono text-[13px] text-obsidian tracking-widest focus:outline-none focus:border-obsidian focus:ring-1 focus:ring-obsidian transition-all shadow-warm-card" id="bearer_token" type="password" value="wisfy_sec_9934af890c23e8"/>
+<button aria-label="Toggle token mask" class="absolute right-3 p-1.5 rounded-lg text-on-surface-variant/70 hover:text-obsidian transition-colors" id="toggle_token_visibility" type="button">
+<span class="material-symbols-outlined text-[20px]" id="eye_icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- 4. Sender Whitelist Filter -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="text-[13px] font-semibold text-obsidian" for="whitelist_filter">
+  Sender Whitelist Filter
+</label>
+<span class="text-[11px] text-on-surface-variant">Comma-separated regex</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full h-[50px] px-4 rounded-xl bg-white border border-card-border font-mono text-[12px] text-obsidian placeholder-on-surface-variant/50 focus:outline-none focus:border-obsidian focus:ring-1 focus:ring-obsidian transition-all shadow-warm-card" id="whitelist_filter" placeholder="e.g. PAYMENTS, BANK_SMS, 10606, AUTH_SERVICE" type="text" value="PAYMENTS, BANK_SMS, 10606, AUTH_SERVICE"/>
+<span class="material-symbols-outlined absolute right-4 text-on-surface-variant/70 text-[20px]">filter_alt</span>
+</div>
+</div>
+<!-- Quick Action Buttons -->
+<div class="pt-2 space-y-3">
+<!-- Secondary: Test Webhook with Refined Outline / Soft Fill -->
+<button class="w-full h-[50px] rounded-full bg-white border border-card-border hover:bg-surface-subtle text-obsidian font-semibold text-[14px] flex items-center justify-center gap-2 active:scale-[0.99] transition-all shadow-warm-card" id="btn_test_webhook" type="button">
+<span class="material-symbols-outlined text-obsidian text-[20px]">network_ping</span>
+<span>Test Webhook</span>
+<span class="inline-flex items-center gap-1 ml-1 px-2 py-0.5 rounded-full bg-surface-subtle text-on-surface-variant font-mono text-[11px]">
+  wisfy.test
+</span>
+</button>
+<!-- Primary: Deep Obsidian Save & Activate Webhook Button -->
+<button class="w-full h-[52px] rounded-full bg-obsidian text-white font-semibold text-[15px] flex items-center justify-center gap-2 shadow-obsidian-subtle hover:bg-obsidian-muted active:scale-[0.98] transition-all" type="submit">
+<span class="material-symbols-outlined text-[21px]">cloud_sync</span>
+<span>Save &amp; Activate Webhook</span>
+</button>
+</div>
+</form>
+<!-- Visual Separator 'OR' -->
+<div class="relative my-7 flex items-center justify-center">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-card-border"></div>
+</div>
+<div class="relative bg-canvas px-4">
+<span class="font-mono text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold">OR</span>
+</div>
+</div>
+<!-- Bottom QR Scanner Card -->
+<section class="flex flex-col items-center text-center">
+<button class="w-14 h-14 rounded-full bg-white border border-card-border flex items-center justify-center text-obsidian hover:bg-surface-subtle active:scale-95 transition-transform duration-150 shadow-warm-card mb-2.5 group" type="button">
+<div class="w-11 h-11 rounded-full bg-obsidian text-white flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[22px]">qr_code_scanner</span>
+</div>
+</button>
+<p class="text-[14px] text-obsidian font-semibold">
+  Or pair with QR Code from Web Dashboard
+</p>
+<p class="text-[12px] text-on-surface-variant mt-0.5">
+  Instant zero-keystroke cryptographic provisioning
+</p>
+</section>
+<!-- Security Micro-telemetry Footer -->
+<footer class="mt-8 pt-4 border-t border-card-border flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-emerald-700 text-[16px]">verified_user</span>
+<span class="font-mono text-[11px] text-on-surface-variant">
+  TLS 1.3 Verified • End-to-End Encrypted
+</span>
+</footer>
+</div>
+<!-- Interactive JavaScript for micro-interactions -->
+<script>
+  // Bearer token password reveal toggle
+  const toggleBtn = document.getElementById('toggle_token_visibility');
+  const tokenInput = document.getElementById('bearer_token');
+  const eyeIcon = document.getElementById('eye_icon');
+
+  if (toggleBtn && tokenInput && eyeIcon) {
+    toggleBtn.addEventListener('click', () => {
+      const isPassword = tokenInput.getAttribute('type') === 'password';
+      tokenInput.setAttribute('type', isPassword ? 'text' : 'password');
+      eyeIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+    });
+  }
+
+  // Synthetic Webhook Ping action
+  const testBtn = document.getElementById('btn_test_webhook');
+  if (testBtn) {
+    testBtn.addEventListener('click', () => {
+      const originalContent = testBtn.innerHTML;
+      testBtn.disabled = true;
+      testBtn.innerHTML = `
+        <span class="material-symbols-outlined animate-spin text-obsidian text-[20px]">sync</span>
+        <span>Dispatching synthetic event...</span>
+      `;
+      setTimeout(() => {
+        testBtn.innerHTML = `
+          <span class="material-symbols-outlined text-emerald-700 text-[20px]">check_circle</span>
+          <span class="text-emerald-700 font-semibold">200 OK (84ms)</span>
+        `;
+        setTimeout(() => {
+          testBtn.innerHTML = originalContent;
+          testBtn.disabled = false;
+        }, 2400);
+      }, 1100);
+    });
+  }
+</script>
+</body></html>

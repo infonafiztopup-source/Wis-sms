@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wisfy SMS - Get Started</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Target Tailwind Configuration -->
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-tertiary-fixed-variant": "#284e42",
+          "inverse-primary": "#c5c6ca",
+          "error": "#ba1a1a",
+          "inverse-surface": "#2f3130",
+          "primary-container": "#14171A",
+          "primary-fixed": "#e1e2e6",
+          "on-secondary-fixed": "#2a1800",
+          "on-surface": "#14171A",
+          "on-primary-fixed-variant": "#44474a",
+          "secondary-fixed": "#ffddb6",
+          "error-container": "#ffdad6",
+          "inverse-on-surface": "#f1f1ef",
+          "outline": "#75777b",
+          "on-primary-fixed": "#191c1f",
+          "on-tertiary-container": "#658c7e",
+          "on-error-container": "#93000a",
+          "outline-variant": "#EBEAE5",
+          "surface-container": "#eeeeec",
+          "secondary-fixed-dim": "#ffb95a",
+          "surface-container-lowest": "#ffffff",
+          "surface-tint": "#5c5f62",
+          "on-secondary-fixed-variant": "#643f00",
+          "surface-variant": "#e2e3e1",
+          "on-primary-container": "#ffffff",
+          "secondary": "#845400",
+          "tertiary-fixed": "#c2ecdb",
+          "surface-container-highest": "#e2e3e1",
+          "on-background": "#14171A",
+          "on-surface-variant": "#6E7175",
+          "on-secondary": "#ffffff",
+          "on-error": "#ffffff",
+          "surface": "#F9F9F7",
+          "tertiary-fixed-dim": "#a6cfbf",
+          "surface-bright": "#F9F9F7",
+          "on-secondary-container": "#764b00",
+          "surface-container-high": "#e8e8e6",
+          "tertiary-container": "#002118",
+          "on-primary": "#ffffff",
+          "on-tertiary-fixed": "#002118",
+          "surface-dim": "#dadad8",
+          "primary": "#14171A",
+          "background": "#F9F9F7",
+          "surface-container-low": "#f4f4f2",
+          "secondary-container": "#fdb654",
+          "tertiary": "#000000",
+          "primary-fixed-dim": "#c5c6ca",
+          "on-tertiary": "#ffffff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-lg": "1.25rem",
+          "margin": "1.25rem",
+          "gutter": "1rem",
+          "space-sm": "0.5rem",
+          "margin-mobile": "1rem",
+          "gutter-mobile": "0.75rem",
+          "space-md": "0.75rem",
+          "space-xl": "1.75rem",
+          "space-xs": "0.25rem"
+        },
+        "fontFamily": {
+          "sans": ["Plus Jakarta Sans", "sans-serif"],
+          "headline-xl": ["Plus Jakarta Sans"],
+          "headline-sm": ["Plus Jakarta Sans"],
+          "body-sm": ["Plus Jakarta Sans"],
+          "price-display": ["Plus Jakarta Sans"],
+          "headline-md": ["Plus Jakarta Sans"],
+          "headline-xl-mobile": ["Plus Jakarta Sans"],
+          "body-md": ["Plus Jakarta Sans"],
+          "label-md": ["Plus Jakarta Sans"],
+          "body-lg": ["Plus Jakarta Sans"],
+          "label-sm": ["Plus Jakarta Sans"],
+          "headline-lg": ["Plus Jakarta Sans"],
+          "label-lg": ["Plus Jakarta Sans"]
+        },
+        "fontSize": {
+          "headline-xl": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.03em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "16px",
+            {
+              "lineHeight": "22px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "400"
+            }
+          ],
+          "price-display": [
+            "22px",
+            {
+              "lineHeight": "26px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-md": [
+            "20px",
+            {
+              "lineHeight": "26px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl-mobile": [
+            "30px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.025em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "21px",
+              "fontWeight": "400"
+            }
+          ],
+          "label-md": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "400"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "15px",
+              "letterSpacing": "0.03em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "24px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-lg": [
+            "15px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex items-center justify-center p-0 sm:p-4 select-none font-sans">
+<!-- Mobile Viewport Shell (Max width 430px) -->
+<div class="relative w-full max-w-[430px] h-[100dvh] sm:h-[880px] sm:max-h-[92vh] sm:rounded-[36px] bg-[#F9F9F7] shadow-[0_20px_60px_-15px_rgba(20,23,26,0.08)] flex flex-col justify-between overflow-hidden border border-[#EBEAE5]">
+<!-- Subtle Warm Ambient Background Gradients -->
+<div class="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-[#EDEBE6]/50 blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/2 -left-32 w-72 h-72 rounded-full bg-[#E5E3DC]/40 blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 right-1/4 w-80 h-80 rounded-full bg-[#EFECE6]/60 blur-3xl pointer-events-none"></div>
+<!-- 1. Top Status Bar -->
+<header class="relative z-10 w-full pt-3 px-margin flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-label-md text-label-md text-on-surface font-semibold tracking-tight">9:27</span>
+<div class="flex items-center space-x-1 pl-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">cell_tower</span>
+<span class="material-symbols-outlined text-[13px]">terminal</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+</div>
+</div>
+<div class="flex items-center space-x-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">wifi</span>
+<span class="material-symbols-outlined text-[16px]">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[18px]">battery_full</span>
+</div>
+</header>
+<!-- 2. Onboarding Main Content Area -->
+<main class="relative z-10 flex-1 flex flex-col items-center justify-between px-margin pt-4 pb-2 text-center">
+<!-- Header Copy Section -->
+<section class="w-full flex flex-col items-center space-y-2 mt-2">
+<div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-surface-container-lowest border border-[#EBEAE5] shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#14171A]"></span>
+<span class="font-label-sm text-label-sm text-on-surface tracking-wider font-semibold uppercase">WISFY SMS GATEWAY</span>
+</div>
+<h1 class="font-headline-xl-mobile text-headline-xl-mobile font-bold text-on-surface tracking-tight leading-tight">
+          Get Started
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[310px] leading-relaxed">
+          Set up Wisfy SMS to securely forward &amp; sync your incoming SMS events directly to your webhooks.
+        </p>
+</section>
+<!-- Center Logo & Tactile Cluster -->
+<section class="relative my-auto py-2 flex flex-col items-center w-full">
+<!-- Floating Backdrop Canvas with Warm Editorial Rims -->
+<div class="relative w-64 h-64 flex items-center justify-center">
+<!-- Concentric Ripple Rings -->
+<div class="absolute inset-0 rounded-full border border-[#E4E2DC]/80 scale-100"></div>
+<div class="absolute inset-6 rounded-full border border-[#EBEAE5] scale-95"></div>
+<div class="absolute inset-12 rounded-full border border-[#EBEAE5]/80 scale-90"></div>
+<!-- Soft Warm Ambient Center Glow -->
+<div class="absolute w-44 h-44 rounded-full bg-[#F3F2EC] blur-xl opacity-80"></div>
+<!-- Pure White Brand Card Container -->
+<div class="relative z-10 w-44 h-44 rounded-[32px] bg-white border border-[#EBEAE5] shadow-[0_12px_36px_-6px_rgba(20,23,26,0.06),0_2px_8px_rgba(20,23,26,0.03)] p-4 flex flex-col items-center justify-center transition-transform hover:scale-[1.02] duration-300">
+<!-- Brand Asset Logo -->
+<img alt="Wisfy Logo" class="w-32 h-32 object-contain filter drop-shadow-[0_4px_12px_rgba(20,23,26,0.06)]" src="https://lh3.googleusercontent.com/aida/AEtjO1Wlp2gFvLydw4KwbH3ANSCpCMf6gvNjYKaVaBE0g_ue18r0c0-6kqMA9y55zpnWY8_-CwPpuo2k2VgRJetWAS3V-GiOUR2wEB3yNqh_g7yLEs2Z7WkzW4aq9KMM_ggQIcfvz1W5liC2jV3MPbBbZDqEVg8P498WPWoY05H_MXpMwgzsct6cUHipdGiEE9NqtDRrihSoFJewlpeaSf0YhOYu3bOtEUK_RO-TrJPFhZ8slQ"/>
+</div>
+<!-- Feature Status Pill Floating Overlay -->
+<div class="absolute -bottom-2 z-20 px-3.5 py-1 rounded-full bg-white border border-[#EBEAE5] shadow-[0_4px_14px_rgba(20,23,26,0.05)] flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-[#14171A]"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Open-Source &amp; Local-First</span>
+</div>
+</div>
+<!-- Key Technical Highlights (Refined Warm Feature Pills) -->
+<div class="mt-6 flex flex-wrap items-center justify-center gap-2 max-w-xs">
+<div class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white border border-[#EBEAE5] shadow-[0_1px_3px_rgba(0,0,0,0.02)] text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-on-surface" data-icon="sync_alt">sync_alt</span>
+<span class="font-label-sm text-label-sm font-medium">Direct HTTPS</span>
+</div>
+<div class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white border border-[#EBEAE5] shadow-[0_1px_3px_rgba(0,0,0,0.02)] text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-on-surface" data-icon="cloud_off">cloud_off</span>
+<span class="font-label-sm text-label-sm font-medium">Local-First</span>
+</div>
+<div class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white border border-[#EBEAE5] shadow-[0_1px_3px_rgba(0,0,0,0.02)] text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-on-surface" data-icon="lock">lock</span>
+<span class="font-label-sm text-label-sm font-medium">TLS 1.3 Encrypted</span>
+</div>
+</div>
+</section>
+<!-- 3. Bottom Interactive Actions & Legal Attribution -->
+<footer class="w-full flex flex-col items-center space-y-3 pb-4">
+<!-- Deep Obsidian CTA Pill Button -->
+<button class="w-full h-[52px] rounded-full bg-[#14171A] hover:bg-[#23272B] active:bg-[#0A0C0E] text-white font-headline-sm text-headline-sm flex items-center justify-center space-x-2 shadow-[0_8px_24px_-4px_rgba(20,23,26,0.22)] active:scale-[0.985] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-black/10" id="continue-button">
+<span class="font-semibold tracking-tight">Continue</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Terms and Developer Attribution -->
+<div class="flex flex-col items-center space-y-1">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            By continuing you agree to our 
+            <a class="text-on-surface hover:underline font-semibold transition-colors duration-150" href="#privacy">Privacy Policy</a>
+</p>
+<span class="font-label-sm text-label-sm text-outline font-normal">
+            Developed by Shahria Nafiz Sajjad
+          </span>
+</div>
+<!-- Home Navigation Indicator Bar -->
+<div class="w-32 h-1 bg-[#14171A]/15 rounded-full mt-2"></div>
+</footer>
+</main>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const continueBtn = document.getElementById('continue-button');
+      if (continueBtn) {
+        continueBtn.addEventListener('click', () => {
+          continueBtn.classList.add('scale-[0.98]');
+          setTimeout(() => {
+            continueBtn.classList.remove('scale-[0.98]');
+          }, 180);
+        });
+      }
+    });
+  </script>
+</body></html>

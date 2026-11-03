@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settings &amp; Logs - Wisfy</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "primary": "#14171A",
+          "obsidian": "#14171A",
+          "on-primary": "#ffffff",
+          "surface": "#F9F9F7",
+          "background": "#F9F9F7",
+          "card-white": "#FFFFFF",
+          "warm-border": "#EBEAE5",
+          "on-surface": "#14171A",
+          "on-surface-variant": "#55585B",
+          "outline": "#75777B",
+          "outline-variant": "#EBEAE5",
+          "surface-container": "#F1F1EE",
+          "surface-container-high": "#E8E8E4",
+          "surface-container-lowest": "#FFFFFF",
+          "error": "#BA1A1A",
+          "error-container": "#FFDAD6",
+          "status-active": "#0F766E",
+          "status-active-bg": "#E6F4F1"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "2xl": "1rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-xs": "0.25rem",
+          "space-sm": "0.5rem",
+          "space-md": "0.75rem",
+          "space-lg": "1.25rem",
+          "space-xl": "1.75rem",
+          "margin": "1.25rem",
+          "gutter": "1rem"
+        },
+        "fontFamily": {
+          "sans": ["Plus Jakarta Sans", "sans-serif"],
+          "headline-xl": ["Plus Jakarta Sans", "sans-serif"],
+          "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+          "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+          "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+          "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+          "body-md": ["Plus Jakarta Sans", "sans-serif"],
+          "body-sm": ["Plus Jakarta Sans", "sans-serif"],
+          "caption": ["Plus Jakarta Sans", "sans-serif"],
+          "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+          "label-md": ["Plus Jakarta Sans", "sans-serif"],
+          "mono": ["JetBrains Mono", "monospace"]
+        },
+        "fontSize": {
+          "headline-xl": ["32px", { "lineHeight": "38px", "fontWeight": "800", "letterSpacing": "-0.02em" }],
+          "headline-lg": ["24px", { "lineHeight": "30px", "fontWeight": "700", "letterSpacing": "-0.02em" }],
+          "headline-md": ["20px", { "lineHeight": "26px", "fontWeight": "700", "letterSpacing": "-0.015em" }],
+          "headline-sm": ["17px", { "lineHeight": "22px", "fontWeight": "600", "letterSpacing": "-0.01em" }],
+          "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+          "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+          "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+          "caption": ["11px", { "lineHeight": "14px", "fontWeight": "600", "letterSpacing": "0.04em" }],
+          "label-sm": ["11px", { "lineHeight": "15px", "fontWeight": "600" }],
+          "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "600" }]
+        }
+      }
+    }
+  }
+</script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+</style>
+</head>
+<body class="bg-[#F9F9F7] text-[#14171A] antialiased min-h-screen selection:bg-[#14171A] selection:text-white">
+<!-- Mobile Wrapper Limit -->
+<div class="max-w-lg mx-auto min-h-screen flex flex-col relative pb-28">
+<!-- Top App Bar (Shared Component Anchor) -->
+<header class="sticky top-0 z-40 bg-[#F9F9F7]/90 backdrop-blur-md border-b border-[#EBEAE5]/80">
+<div class="flex justify-between items-center w-full px-margin h-14 max-w-lg mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#14171A] text-xl" data-icon="cell_tower">cell_tower</span>
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-[#14171A]">wisfy</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#14171A]/5 border border-[#14171A]/10 text-[#14171A] font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+            LIVE
+          </span>
+<button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#EBEAE5] transition-colors duration-200 text-[#55585B] active:scale-95 duration-150">
+<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Canvas Header -->
+<section class="px-margin pt-4 pb-2">
+<h1 class="font-headline-lg text-headline-lg text-[#14171A] tracking-tight">Settings &amp; Logs</h1>
+<p class="font-body-sm text-body-sm text-[#55585B] mt-0.5">Configure device parameters, retries, and data retention</p>
+</section>
+<!-- Main Content Stream -->
+<main class="px-margin space-y-4 flex-1 mt-2">
+<!-- Profile & Dev Card -->
+<section class="bg-[#FFFFFF] rounded-2xl p-space-lg border border-[#EBEAE5] shadow-[0_2px_12px_rgba(20,23,26,0.03)] relative overflow-hidden">
+<div class="flex items-start justify-between gap-3">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-[#14171A] font-bold">Wisfy SMS Gateway</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-md bg-[#F1F1EE] text-[#14171A] font-medium font-mono">v1.0.0</span>
+</div>
+<div class="flex items-center gap-1.5 text-[#55585B]">
+<span class="font-body-sm text-body-sm">Developed by Shahria Nafiz Sajjad</span>
+<span class="material-symbols-outlined text-emerald-600 text-sm inline-block" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-xl bg-[#14171A] flex items-center justify-center text-white shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-[#EBEAE5] flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="font-caption text-caption text-[#75777B]">DEVICE ID</span>
+<span class="font-label-sm text-label-sm text-[#14171A] font-semibold tracking-wider font-mono">WSF-DEV-98421</span>
+</div>
+<button class="inline-flex items-center gap-1 font-label-sm text-label-sm text-[#14171A] hover:text-[#55585B] font-semibold transition-colors" title="Copy Identifier">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+</section>
+<!-- Section 1: Listener & Background Execution -->
+<section class="space-y-2">
+<div class="flex items-center gap-1.5 px-1">
+<span class="material-symbols-outlined text-sm text-[#14171A]" data-icon="sync">sync</span>
+<span class="font-caption text-caption uppercase tracking-wider text-[#75777B] font-bold">Listener &amp; Background Execution</span>
+</div>
+<div class="bg-[#FFFFFF] rounded-2xl border border-[#EBEAE5] divide-y divide-[#EBEAE5] shadow-[0_2px_12px_rgba(20,23,26,0.03)]">
+<!-- Background Service Switch -->
+<div class="p-space-lg flex items-center justify-between gap-4">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-semibold text-[#14171A]">Background Service</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                  Active
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-[#55585B]">Persistent foreground daemon capturing SMS broadcasts</p>
+</div>
+<!-- Obsidian Toggle Active -->
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-[#EBEAE5] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#14171A]"></div>
+</label>
+</div>
+<!-- Battery Optimization Exemption -->
+<div class="p-space-lg flex items-center justify-between gap-4">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-semibold text-[#14171A]">Battery Optimization</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-emerald-700 font-medium">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                  Granted
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-[#55585B]">Whitelisted from Doze mode suspension</p>
+</div>
+<button class="px-3 py-1.5 rounded-full bg-[#F1F1EE] hover:bg-[#E8E8E4] text-[#14171A] font-label-sm text-label-sm transition-colors active:scale-95 duration-150">
+              Review
+            </button>
+</div>
+</div>
+</section>
+<!-- Section 2: Webhook & Retry Rules -->
+<section class="space-y-2">
+<div class="flex items-center gap-1.5 px-1">
+<span class="material-symbols-outlined text-sm text-[#14171A]" data-icon="hub">hub</span>
+<span class="font-caption text-caption uppercase tracking-wider text-[#75777B] font-bold">Webhook &amp; Retry Rules</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<!-- Retry Card -->
+<div class="bg-[#FFFFFF] rounded-2xl p-space-lg border border-[#EBEAE5] shadow-[0_2px_12px_rgba(20,23,26,0.03)] space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-[#75777B]">RETRY POLICY</span>
+<span class="material-symbols-outlined text-[#14171A] text-lg" data-icon="replay">replay</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-[#14171A] font-bold">3 Retries</span>
+<p class="font-body-sm text-body-sm text-[#55585B] mt-0.5">Exponential Backoff with Jitter (1s, 2s, 4s)</p>
+</div>
+<div class="pt-2 flex items-center gap-1 text-[#14171A] font-label-sm text-label-sm cursor-pointer hover:underline font-semibold">
+<span>Tune backoff curve</span>
+<span class="material-symbols-outlined text-xs" data-icon="tune">tune</span>
+</div>
+</div>
+<!-- Timeout Card -->
+<div class="bg-[#FFFFFF] rounded-2xl p-space-lg border border-[#EBEAE5] shadow-[0_2px_12px_rgba(20,23,26,0.03)] space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-[#75777B]">BOUNDED TIMEOUT</span>
+<span class="material-symbols-outlined text-[#14171A] text-lg" data-icon="timer">timer</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-[#14171A] font-bold">10 Seconds</span>
+<p class="font-body-sm text-body-sm text-[#55585B] mt-0.5">Strict HTTP connection and read cap</p>
+</div>
+<div class="pt-2 flex items-center gap-1 text-[#14171A] font-label-sm text-label-sm cursor-pointer hover:underline font-semibold">
+<span>Change threshold</span>
+<span class="material-symbols-outlined text-xs" data-icon="tune">tune</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Privacy & Data Minimization -->
+<section class="space-y-2">
+<div class="flex items-center gap-1.5 px-1">
+<span class="material-symbols-outlined text-sm text-[#14171A]" data-icon="shield">shield</span>
+<span class="font-caption text-caption uppercase tracking-wider text-[#75777B] font-bold">Privacy &amp; Data Minimization</span>
+</div>
+<div class="bg-[#FFFFFF] rounded-2xl border border-[#EBEAE5] divide-y divide-[#EBEAE5] shadow-[0_2px_12px_rgba(20,23,26,0.03)]">
+<!-- Mask SMS Body -->
+<div class="p-space-lg flex items-center justify-between gap-4">
+<div class="space-y-0.5">
+<span class="font-body-md text-body-md font-semibold text-[#14171A]">Mask SMS Body in Logs</span>
+<p class="font-body-sm text-body-sm text-[#55585B]">Obfuscates message content with asterisks in on-device database</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-[#EBEAE5] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#14171A]"></div>
+</label>
+</div>
+<!-- Forward Raw Message Body -->
+<div class="p-space-lg flex items-center justify-between gap-4">
+<div class="space-y-0.5">
+<span class="font-body-md text-body-md font-semibold text-[#14171A]">Forward Raw Message Body</span>
+<p class="font-body-sm text-body-sm text-[#55585B]">Disabled: transmits sanitized/parsed JSON payloads only</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-[#EBEAE5] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#14171A]"></div>
+</label>
+</div>
+<!-- OTP Auto-Filter -->
+<div class="p-space-lg flex items-center justify-between gap-4">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-semibold text-[#14171A]">OTP / Private Code Auto-Filter</span>
+<span class="font-label-sm text-label-sm text-[#55585B] bg-[#F1F1EE] px-1.5 py-0.5 rounded font-mono font-medium">Regex v2</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#55585B]">Redacts dynamic authorization tokens before logging</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-[#EBEAE5] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#14171A]"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Section 4: Local Data & Cache -->
+<section class="space-y-2">
+<div class="flex items-center gap-1.5 px-1">
+<span class="material-symbols-outlined text-sm text-[#14171A]" data-icon="database">database</span>
+<span class="font-caption text-caption uppercase tracking-wider text-[#75777B] font-bold">Local Data &amp; Cache</span>
+</div>
+<div class="bg-[#FFFFFF] rounded-2xl p-space-lg border border-[#EBEAE5] shadow-[0_2px_12px_rgba(20,23,26,0.03)] space-y-4">
+<div class="flex items-center justify-between">
+<div class="space-y-0.5">
+<span class="font-body-md text-body-md font-semibold text-[#14171A]">SQLite Storage</span>
+<p class="font-body-sm text-body-sm text-[#55585B]">Device buffer and audit trail</p>
+</div>
+<div class="text-right">
+<span class="font-headline-sm text-headline-sm font-bold text-[#14171A]">1.4 MB</span>
+<p class="font-label-sm text-label-sm text-[#75777B]">130 records</p>
+</div>
+</div>
+<!-- Capacity Bar -->
+<div class="w-full bg-[#F1F1EE] rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#14171A] h-full rounded-full" style="width: 14%;"></div>
+</div>
+<!-- Actions -->
+<div class="space-y-2 pt-1">
+<button class="w-full h-11 rounded-xl bg-[#14171A] hover:bg-[#2A2E33] text-white font-body-md font-medium flex items-center justify-center gap-2 active:scale-[0.99] transition-all shadow-sm">
+<span class="material-symbols-outlined text-lg" data-icon="file_download">file_download</span>
+<span>Export Diagnostic Report (Redacted)</span>
+</button>
+<button class="w-full h-11 rounded-xl bg-red-50 hover:bg-red-100/70 text-red-700 font-body-md font-medium flex items-center justify-center gap-2 border border-red-200/60 active:scale-[0.99] transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="delete_sweep">delete_sweep</span>
+<span>Clear Local Queue &amp; Logs</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Section 5: About & Open Source -->
+<section class="space-y-2">
+<div class="flex items-center gap-1.5 px-1">
+<span class="material-symbols-outlined text-sm text-[#14171A]" data-icon="info">info</span>
+<span class="font-caption text-caption uppercase tracking-wider text-[#75777B] font-bold">About &amp; Open Source</span>
+</div>
+<div class="bg-[#FFFFFF] rounded-2xl p-space-lg border border-[#EBEAE5] shadow-[0_2px_12px_rgba(20,23,26,0.03)] flex items-center justify-between">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-semibold text-[#14171A]">MIT License</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#F1F1EE] text-[#55585B] font-medium font-mono">Free &amp; FOSS</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#55585B]">Built for transparent edge telephony tooling</p>
+</div>
+<a class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#14171A] text-white font-label-sm text-label-sm font-semibold hover:bg-[#2A2E33] transition-colors" href="#">
+<span>Repository</span>
+<span class="material-symbols-outlined text-sm" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Shared Component Anchor) -->
+<!-- Destination count: 4 | Matching Active Item: Settings -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-t border-[#EBEAE5]">
+<div class="flex justify-around items-center px-gutter h-[68px] max-w-lg mx-auto">
+<!-- Tab 1: Dashboard -->
+<a class="flex flex-col items-center justify-center text-[#75777B] px-3 py-1.5 hover:text-[#14171A] transition-colors duration-200 active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm mt-0.5">Dashboard</span>
+</a>
+<!-- Tab 2: SMS Feed -->
+<a class="flex flex-col items-center justify-center text-[#75777B] px-3 py-1.5 hover:text-[#14171A] transition-colors duration-200 active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="sms">sms</span>
+<span class="font-label-sm text-label-sm mt-0.5">SMS Feed</span>
+</a>
+<!-- Tab 3: Endpoints -->
+<a class="flex flex-col items-center justify-center text-[#75777B] px-3 py-1.5 hover:text-[#14171A] transition-colors duration-200 active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="webhook">webhook</span>
+<span class="font-label-sm text-label-sm mt-0.5">Endpoints</span>
+</a>
+<!-- Tab 4: Settings (ACTIVE) - Obsidian Styled -->
+<a class="flex flex-col items-center justify-center bg-[#14171A] text-white rounded-full px-4 py-1.5 transition-all duration-200 active:scale-95 duration-150 shadow-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-sm text-label-sm mt-0.5">Settings</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

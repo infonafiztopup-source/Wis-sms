@@ -1,0 +1,58 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+
+    <!-- Dark Obsidian Background Badge -->
+    <path
+        android:fillColor="#0B0E14"
+        android:pathData="M24,8 L72,8 A16,16 0 0 1 88,24 L88,72 A16,16 0 0 1 72,88 L24,88 A16,16 0 0 1 8,72 L8,24 A16,16 0 0 1 24,8 Z" />
+
+    <!-- Neon Emerald Glowing Border -->
+    <path
+        android:strokeColor="#10B981"
+        android:strokeWidth="2.5"
+        android:pathData="M24,8 L72,8 A16,16 0 0 1 88,24 L88,72 A16,16 0 0 1 72,88 L24,88 A16,16 0 0 1 8,72 L8,24 A16,16 0 0 1 24,8 Z" />
+
+    <!-- Signal Arc Outer -->
+    <path
+        android:strokeColor="#10B981"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M32,30 A24,24 0 0,1 64,30" />
+
+    <!-- Signal Arc Inner -->
+    <path
+        android:strokeColor="#34D399"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M38,36 A14,14 0 0,1 58,36" />
+
+    <!-- Central Signal Pulse Dot -->
+    <path
+        android:fillColor="#10B981"
+        android:pathData="M48,42 A3,3 0 1,1 48,36 A3,3 0 1,1 48,42 Z" />
+
+    <!-- Geometric Wisfy "W" Monogram in Pure White and Emerald -->
+    <!-- Left Stem -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M26,48 L32,48 L38,70 L32,70 Z" />
+
+    <!-- Left-Center Diagonal -->
+    <path
+        android:fillColor="#10B981"
+        android:pathData="M38,70 L48,52 L52,52 L42,70 Z" />
+
+    <!-- Right-Center Diagonal -->
+    <path
+        android:fillColor="#10B981"
+        android:pathData="M48,52 L58,70 L52,70 L44,52 Z" />
+
+    <!-- Right Stem -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M58,70 L64,48 L70,48 L64,70 Z" />
+
+</vector>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMS &amp; Webhook Gateway</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-tertiary-fixed-variant": "#284e42",
+            "tertiary-container": "#002118",
+            "on-tertiary-fixed": "#002118",
+            "primary-container": "#191c1f",
+            "on-error": "#ffffff",
+            "on-primary-fixed": "#191c1f",
+            "surface-variant": "#e2e3e1",
+            "surface-dim": "#dadad8",
+            "secondary-fixed-dim": "#fbba65",
+            "on-secondary-fixed-variant": "#643f00",
+            "on-surface-variant": "#44474a",
+            "outline": "#75777b",
+            "secondary-fixed": "#ffddb6",
+            "inverse-on-surface": "#f1f1ef",
+            "secondary": "#845400",
+            "surface-tint": "#5c5f62",
+            "surface-container": "#eeeeec",
+            "on-surface": "#1a1c1b",
+            "on-secondary-container": "#764b00",
+            "primary": "#000000",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "inverse-primary": "#c5c6ca",
+            "secondary-container": "#febd67",
+            "tertiary-fixed": "#c2ecdb",
+            "inverse-surface": "#2f3130",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#c5c6ca",
+            "on-secondary-fixed": "#2a1800",
+            "tertiary-fixed-dim": "#a6cfbf",
+            "on-error-container": "#93000a",
+            "on-background": "#1a1c1b",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#c5c6ca",
+            "on-tertiary": "#ffffff",
+            "surface-container-highest": "#e2e3e1",
+            "on-primary-fixed-variant": "#44474a",
+            "surface-bright": "#f9f9f7",
+            "surface-container-high": "#e8e8e6",
+            "surface-container-low": "#f4f4f2",
+            "tertiary": "#000000",
+            "on-primary": "#ffffff",
+            "on-tertiary-container": "#658c7e",
+            "on-primary-container": "#828488",
+            "background": "#f9f9f7",
+            "primary-fixed": "#e1e2e6",
+            "surface": "#f9f9f7"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f9f9f7;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col justify-between">
+<!-- Main View Container -->
+<div class="w-full max-w-md mx-auto min-h-screen flex flex-col bg-background pb-20 shadow-sm border-x border-outline-variant/30">
+<!-- Top Header -->
+<header class="sticky top-0 z-30 bg-background/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-outline-variant/30">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">hub</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h1 class="text-headline-sm font-bold text-on-surface tracking-tight">Gateway Ingestion</h1>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-tertiary-fixed text-on-tertiary-fixed-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-fixed-variant animate-pulse"></span>
+              LIVE
+            </span>
+</div>
+<p class="text-body-sm text-on-surface-variant font-medium">Auto-parsing &amp; Webhook Relay</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Quick Filter" class="w-9 h-9 rounded-lg border border-outline-variant/40 bg-surface-container-lowest flex items-center justify-center text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+<button aria-label="Notifications" class="w-9 h-9 rounded-lg border border-outline-variant/40 bg-surface-container-lowest flex items-center justify-center text-on-surface-variant hover:text-on-surface relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest"></span>
+</button>
+</div>
+</header>
+<!-- Operational Overview Metrics -->
+<section class="p-4 space-y-3">
+<div class="flex items-center justify-between">
+<p class="text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Performance Snapshot</p>
+<div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-on-tertiary-fixed-variant">sync</span>
+<span>Updated 4s ago</span>
+</div>
+</div>
+<!-- Generic Metrics Grid -->
+<div class="grid grid-cols-3 gap-2.5">
+<div class="bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant/40 flex flex-col justify-between shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+<div>
+<span class="text-label-sm text-on-surface-variant block mb-1">Total Capture</span>
+<p class="text-headline-sm font-bold text-on-surface tracking-tight">$1,840.00</p>
+</div>
+<div class="mt-2.5 flex items-center text-[11px] font-semibold text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined text-[13px] mr-0.5">trending_up</span>
+<span>+12.4%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant/40 flex flex-col justify-between shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+<div>
+<span class="text-label-sm text-on-surface-variant block mb-1">Endpoints</span>
+<p class="text-headline-sm font-bold text-on-surface tracking-tight">3 Active</p>
+</div>
+<div class="mt-2.5 flex items-center text-[11px] font-semibold text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px] mr-0.5">done_all</span>
+<span>All Healthy</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant/40 flex flex-col justify-between shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+<div>
+<span class="text-label-sm text-on-surface-variant block mb-1">Success Rate</span>
+<p class="text-headline-sm font-bold text-on-surface tracking-tight">99.4%</p>
+</div>
+<div class="mt-2.5 flex items-center text-[11px] font-semibold text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined text-[13px] mr-0.5">verified</span>
+<span>0 Errors</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Financial Capture & Dispatches Highlights -->
+<section class="px-4 pb-2">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/40 shadow-sm flex flex-col gap-3">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-fixed-variant"></span>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-tertiary-fixed-variant">Pipeline Active</span>
+</div>
+<h2 class="text-headline-sm font-bold text-on-surface mt-0.5">Financial Capture &amp; Dispatches</h2>
+<p class="text-body-sm text-on-surface-variant">128 delivered • 2 in queue • Avg latency 320ms</p>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface text-label-md font-semibold hover:bg-surface-variant transition flex items-center gap-1">
+<span>Telemetry</span>
+<span class="material-symbols-outlined text-[16px]">north_east</span>
+</button>
+</div>
+<!-- Latency Bar Progress Indicator -->
+<div class="space-y-1.5 pt-1">
+<div class="flex justify-between text-label-sm text-on-surface-variant">
+<span>Dispatch Queue Capacity</span>
+<span class="font-semibold text-on-surface">130/500 TPS</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 26%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Live Dispatched Feed Section -->
+<section class="px-4 py-3 flex-1 flex flex-col">
+<!-- Section Controls -->
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<h3 class="text-headline-sm font-bold text-on-surface">Live Dispatched Feed</h3>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-bold">130 events</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container p-1 rounded-lg">
+<button class="px-2.5 py-1 text-xs font-semibold rounded bg-surface-container-lowest text-on-surface shadow-sm">All</button>
+<button class="px-2.5 py-1 text-xs font-medium text-on-surface-variant hover:text-on-surface">Delivered</button>
+<button class="px-2.5 py-1 text-xs font-medium text-on-surface-variant hover:text-on-surface">Pending</button>
+</div>
+</div>
+<!-- Feed Cards (Generic Identifiers & Warm Obsidian Styling) -->
+<div class="space-y-2.5">
+<!-- Feed Item 1 -->
+<div class="bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant/40 shadow-sm transition hover:border-outline">
+<div class="flex items-start justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface text-[11px] font-bold tracking-wide">
+                SMS EVENT #1042
+              </span>
+<span class="inline-flex items-center text-[11px] font-semibold text-on-tertiary-fixed-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-fixed-variant mr-1"></span>
+                Delivered (210ms)
+              </span>
+</div>
+<span class="text-label-sm text-on-surface-variant font-mono">14:32:08</span>
+</div>
+<div class="bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/20 font-mono text-xs text-on-surface space-y-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px]">
+<span class="font-sans font-semibold text-on-surface">ENDPOINT: Production API</span>
+<span>EVENT: payment.received</span>
+</div>
+<div class="text-on-surface font-semibold text-[13px] pt-1 flex justify-between">
+<span>Amount: $240.00 USD</span>
+<span class="text-on-surface-variant font-normal">TrxID: TX_99482A9C</span>
+</div>
+<p class="text-[11px] text-on-surface-variant truncate">payload: {"account_ref": "USR_9921", "auth_status": "SUCCESS", "channel": "INGEST_GW"}</p>
+</div>
+</div>
+<!-- Feed Item 2 -->
+<div class="bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant/40 shadow-sm transition hover:border-outline">
+<div class="flex items-start justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface text-[11px] font-bold tracking-wide">
+                SMS EVENT #1041
+              </span>
+<span class="inline-flex items-center text-[11px] font-semibold text-on-tertiary-fixed-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-fixed-variant mr-1"></span>
+                Delivered (184ms)
+              </span>
+</div>
+<span class="text-label-sm text-on-surface-variant font-mono">14:31:42</span>
+</div>
+<div class="bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/20 font-mono text-xs text-on-surface space-y-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px]">
+<span class="font-sans font-semibold text-on-surface">ENDPOINT: Billing Relay v2</span>
+<span>EVENT: notification.sync</span>
+</div>
+<div class="text-on-surface font-semibold text-[13px] pt-1 flex justify-between">
+<span>Amount: $65.50 USD</span>
+<span class="text-on-surface-variant font-normal">TrxID: TX_88174C3F</span>
+</div>
+<p class="text-[11px] text-on-surface-variant truncate">payload: {"account_ref": "USR_3012", "dispatch_state": "FORWARDED", "retries": 0}</p>
+</div>
+</div>
+<!-- Feed Item 3 -->
+<div class="bg-surface-container-lowest p-3.5 rounded-xl border border-outline-variant/40 shadow-sm transition hover:border-outline">
+<div class="flex items-start justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface text-[11px] font-bold tracking-wide">
+                SMS EVENT #1040
+              </span>
+<span class="inline-flex items-center text-[11px] font-semibold text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary mr-1 animate-pulse"></span>
+                In Queue (Relaying)
+              </span>
+</div>
+<span class="text-label-sm text-on-surface-variant font-mono">14:31:15</span>
+</div>
+<div class="bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/20 font-mono text-xs text-on-surface space-y-1">
+<div class="flex items-center justify-between text-on-surface-variant text-[11px]">
+<span class="font-sans font-semibold text-on-surface">ENDPOINT: Analytics Cluster</span>
+<span>EVENT: payment.received</span>
+</div>
+<div class="text-on-surface font-semibold text-[13px] pt-1 flex justify-between">
+<span>Amount: $520.00 USD</span>
+<span class="text-on-surface-variant font-normal">EventID: EVT_77215X</span>
+</div>
+<p class="text-[11px] text-on-surface-variant truncate">payload: {"batch_id": "B_903", "sender_channel": "ROUTER_PRIMARY", "state": "BUFFERED"}</p>
+</div>
+</div>
+</div>
+<!-- Quick Action Controls -->
+<div class="mt-4 pt-2 flex items-center justify-between gap-3">
+<button class="flex-1 py-2.5 px-4 rounded-xl bg-primary text-on-primary font-bold text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-neutral-800 transition shadow-sm">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span>Force Sync Gateway</span>
+</button>
+<button class="py-2.5 px-4 rounded-xl bg-surface-container-lowest border border-outline-variant/40 text-on-surface font-bold text-sm hover:bg-surface-container transition flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span>Audit Log</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Shared Bottom Navigation Bar (Exact Immutable Component) -->
+<div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+<div class="w-full max-w-md pointer-events-auto shadow-lg">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-neutral-50 group/design-root overflow-x-hidden hidden" style='font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;'></div>
+<div class="flex gap-2 border-t border-[#ecedee] bg-neutral-50 px-4 pb-3 pt-2">
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-[#131415]" href="#">
+<div class="text-[#131415] flex h-8 items-center justify-center" data-icon="ChartLine" data-size="24px" data-weight="fill">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM200,176a8,8,0,0,1,0,16H56a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v62.92l34.88-29.07a8,8,0,0,1,9.56-.51l43,28.69,43.41-36.18a8,8,0,0,1,10.24,12.3l-48,40a8,8,0,0,1-9.56.51l-43-28.69L64,155.75V176Z"></path>
+</svg>
+</div>
+<p class="text-[#131415] text-xs font-medium leading-normal tracking-[0.015em]">Live Feed</p>
+</a>
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 text-[#6d7378]" href="#">
+<div class="text-[#6d7378] flex h-8 items-center justify-center" data-icon="ArrowsClockwise" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M197.67,186.37a8,8,0,0,1,0,11.29C196.58,198.73,170.82,224,128,224c-37.39,0-64.53-22.4-80-39.85V208a8,8,0,0,1-16,0V160a8,8,0,0,1,8-8H88a8,8,0,0,1,0,16H55.44C67.76,183.35,93,208,128,208c36,0,58.14-21.46,58.36-21.68A8,8,0,0,1,197.67,186.37ZM216,40a8,8,0,0,0-8,8V71.85C192.53,54.4,165.39,32,128,32,85.18,32,59.42,57.27,58.34,58.34a8,8,0,0,0,11.3,11.34C69.86,69.46,92,48,128,48c35,0,60.24,24.65,72.56,40H168a8,8,0,0,0,0,16h48a8,8,0,0,0,8-8V48A8,8,0,0,0,216,40Z"></path>
+</svg>
+</div>
+<p class="text-[#6d7378] text-xs font-medium leading-normal tracking-[0.015em]">EndPoints</p>
+</a>
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 text-[#6d7378]" href="#">
+<div class="text-[#6d7378] flex h-8 items-center justify-center" data-icon="Key" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M160,16A80.07,80.07,0,0,0,83.91,120.78L26.34,178.34A8,8,0,0,0,24,184v40a8,8,0,0,0,8,8H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A80,80,0,1,0,160,16Zm0,144a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A64,64,0,1,1,160,160Zm32-84a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"></path>
+</svg>
+</div>
+<p class="text-[#6d7378] text-xs font-medium leading-normal tracking-[0.015em]">Metrics</p>
+</a>
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 text-[#6d7378]" href="#">
+<div class="text-[#6d7378] flex h-8 items-center justify-center" data-icon="Gear" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"></path>
+</svg>
+</div>
+<p class="text-[#6d7378] text-xs font-medium leading-normal tracking-[0.015em]">Settings</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

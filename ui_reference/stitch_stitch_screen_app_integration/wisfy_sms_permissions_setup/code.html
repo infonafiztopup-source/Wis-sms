@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wisfy SMS Permissions Setup</title>
+<!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#14171a",
+            "primary-container": "#14171a",
+            "on-primary": "#ffffff",
+            "surface": "#f9f9f7",
+            "background": "#f9f9f7",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f4f4f1",
+            "surface-container": "#eeeeec",
+            "surface-container-high": "#e8e8e5",
+            "surface-container-highest": "#e2e2de",
+            "outline": "#75777b",
+            "outline-variant": "#ebeae5",
+            "on-surface": "#14171a",
+            "on-surface-variant": "#5f6368",
+            "secondary": "#2e7d32",
+            "secondary-container": "#e8f5e9",
+            "on-secondary-container": "#1b5e20",
+            "tertiary": "#14171a",
+            "warm-border": "#ebeae5"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-xl": "2rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "margin": "1.25rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "sans": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "caption": ["Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Plus Jakarta Sans", "sans-serif"],
+            "label-sm": ["JetBrains Mono", "monospace"],
+            "body-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["JetBrains Mono", "monospace"]
+          },
+          "fontSize": {
+            "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "caption": ["11px", { "lineHeight": "15px", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "19px", "fontWeight": "400" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "fontWeight": "800" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "26px", "fontWeight": "700" }],
+            "headline-sm": ["17px", { "lineHeight": "23px", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .custom-scroll {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#F9F9F7] text-[#14171A] antialiased min-h-screen flex justify-center selection:bg-neutral-200 selection:text-neutral-900">
+<!-- Mobile Viewport Canvas Container (< 600px mobile-first) -->
+<div class="w-full max-w-lg min-h-screen bg-[#F9F9F7] flex flex-col justify-between relative border-x border-[#EBEAE5]">
+<!-- Top Navigation Header -->
+<header class="sticky top-0 z-30 bg-[#F9F9F7]/90 backdrop-blur-md px-margin py-3.5 flex items-center justify-between border-b border-[#EBEAE5]/70">
+<button aria-label="Go back" class="w-10 h-10 rounded-xl bg-white border border-[#EBEAE5] flex items-center justify-center text-[#14171A] shadow-sm active:scale-95 transition-all hover:bg-neutral-50" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-[#14171A] font-bold tracking-tight">We Need Access</h1>
+<!-- Status telemetry badge in corner -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-label-sm text-[10px] text-emerald-800 tracking-wider font-semibold uppercase">AUDIT SAFE</span>
+</div>
+</header>
+<!-- Main Content Area with Custom Scroll -->
+<main class="flex-1 px-margin pt-5 pb-6 overflow-y-auto custom-scroll space-y-5">
+<!-- Hero Visual Badge Section: Obsidian + Warm Tone Accent -->
+<div class="flex items-center justify-center pt-1">
+<div class="relative flex items-center justify-center">
+<!-- Outer Tactile Glass Ring -->
+<div class="relative w-16 h-16 rounded-2xl bg-white border border-[#EBEAE5] p-3 shadow-sm flex items-center justify-center group">
+<div class="w-12 h-12 rounded-xl bg-[#14171A] flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-white text-[26px]" data-icon="touch_app" data-weight="fill" style="font-variation-settings: 'FILL' 1;">touch_app</span>
+</div>
+<!-- Micro Beacon -->
+<span class="absolute -top-1 -right-1 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-600 border-2 border-white"></span>
+</span>
+</div>
+</div>
+</div>
+<!-- Core Purpose Header Text -->
+<div class="text-center space-y-1.5">
+<h2 class="font-headline-sm text-headline-sm text-[#14171A] font-bold tracking-tight">Wisfy SMS Daemon Gateway</h2>
+<p class="font-body-sm text-body-sm text-[#5f6368] max-w-sm mx-auto leading-relaxed">
+          Wisfy SMS requires access to SMS messages to forward authorized incoming transaction and notification events directly to your configured webhook endpoints.
+        </p>
+</div>
+<!-- Structured Bento/Feature Highlights Container Card -->
+<div class="bg-white rounded-2xl p-3.5 border border-[#EBEAE5] shadow-sm space-y-2.5">
+<!-- Requirement Item 1 -->
+<div class="flex items-start gap-3 p-3 rounded-xl bg-[#F9F9F7] border border-[#EBEAE5]/60 hover:border-[#EBEAE5] transition-colors">
+<div class="w-8 h-8 rounded-lg bg-[#14171A] flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+<span class="material-symbols-outlined text-white text-[17px]" data-icon="mark_chat_unread">mark_chat_unread</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-label-sm text-[11px] text-[#14171A] font-bold tracking-tight">RECEIVE_SMS &amp; READ_SMS</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-sm bg-neutral-200/80 text-neutral-800 font-semibold">Core</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#5f6368] mt-0.5">
+              Capture incoming payment &amp; event SMS in real time without human intervention.
+            </p>
+</div>
+</div>
+<!-- Requirement Item 2 -->
+<div class="flex items-start gap-3 p-3 rounded-xl bg-[#F9F9F7] border border-[#EBEAE5]/60 hover:border-[#EBEAE5] transition-colors">
+<div class="w-8 h-8 rounded-lg bg-neutral-100 border border-[#EBEAE5] flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[#14171A] text-[17px]" data-icon="battery_charging_full">battery_charging_full</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-[11px] text-[#14171A] font-bold tracking-tight">Battery Optimization Bypass</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#5f6368] mt-0.5">
+              Keep background forwarder running persistently without OS killing the listener daemon.
+            </p>
+</div>
+</div>
+<!-- Requirement Item 3 -->
+<div class="flex items-start gap-3 p-3 rounded-xl bg-[#F9F9F7] border border-[#EBEAE5]/60 hover:border-[#EBEAE5] transition-colors">
+<div class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200/70 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-emerald-700 text-[17px]" data-icon="shield">shield</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-label-sm text-[11px] text-emerald-900 font-bold tracking-tight">Local-first Guarantee</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-sm bg-emerald-100 text-emerald-800 font-semibold">Zero-Cloud</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#5f6368] mt-0.5">
+              All data is processed locally on your phone. Personal SMS, OTPs, and private messages are filtered or omitted.
+            </p>
+</div>
+</div>
+</div>
+<!-- Regulatory & Transparency Disclosure -->
+<div class="rounded-xl p-3.5 bg-white border border-[#EBEAE5] flex items-start gap-2.5 shadow-sm">
+<span class="material-symbols-outlined text-neutral-400 text-[18px] shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="font-caption text-caption text-[#5f6368] leading-relaxed">
+          You can inspect every captured payload in real-time via the <strong class="text-[#14171A]">SMS Feed</strong> inspector. Telemetry keys are isolated and cryptographic tokens are held in Android Keystore.
+        </p>
+</div>
+<!-- Checkbox Agreement Card -->
+<label class="group flex items-center gap-3.5 p-3.5 rounded-xl bg-white border border-[#14171A] shadow-sm cursor-pointer transition-all duration-200" id="agreement-card">
+<input checked="" class="w-5 h-5 rounded text-[#14171A] focus:ring-[#14171A]/20 border-neutral-300 transition-colors cursor-pointer" id="consent-check" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-[#14171A] select-none">
+          I understand and agree <a class="text-[#14171A] font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity" href="#privacy">Privacy Policy</a>
+</span>
+</label>
+</main>
+<!-- Bottom Action & Trust Anchor Section -->
+<footer class="p-margin pt-2 pb-6 bg-[#F9F9F7]/95 backdrop-blur-sm space-y-3 border-t border-[#EBEAE5]/70">
+<!-- Primary Action CTA Button: Warm Obsidian -->
+<button class="w-full h-[52px] rounded-full bg-[#14171A] hover:bg-neutral-800 active:scale-[0.98] text-white font-headline-sm text-[16px] font-bold tracking-wide flex items-center justify-center gap-2 shadow-md shadow-black/10 transition-all duration-200" id="grant-btn" type="button">
+<span>Give Permissions</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="lock">lock</span>
+</button>
+<!-- Trust Footer Marker -->
+<div class="flex items-center justify-center gap-2 pt-1">
+<span class="material-symbols-outlined text-emerald-700 text-[16px]" data-icon="verified_user" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<p class="font-label-sm text-label-sm text-[#5f6368] tracking-wider font-semibold">
+          Secure • Private • Local-First
+        </p>
+</div>
+</footer>
+</div>
+<!-- Micro-Interactions Script -->
+<script>
+    const consentCheck = document.getElementById('consent-check');
+    const grantBtn = document.getElementById('grant-btn');
+    const agreementCard = document.getElementById('agreement-card');
+
+    function updateState() {
+      if (consentCheck.checked) {
+        grantBtn.disabled = false;
+        grantBtn.classList.remove('opacity-40', 'cursor-not-allowed', 'shadow-none');
+        grantBtn.classList.add('bg-[#14171A]', 'shadow-md');
+        agreementCard.classList.remove('border-[#EBEAE5]');
+        agreementCard.classList.add('border-[#14171A]');
+      } else {
+        grantBtn.disabled = true;
+        grantBtn.classList.add('opacity-40', 'cursor-not-allowed', 'shadow-none');
+        grantBtn.classList.remove('bg-[#14171A]', 'shadow-md');
+        agreementCard.classList.remove('border-[#14171A]');
+        agreementCard.classList.add('border-[#EBEAE5]');
+      }
+    }
+
+    consentCheck.addEventListener('change', updateState);
+
+    grantBtn.addEventListener('click', () => {
+      if (!grantBtn.disabled) {
+        grantBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[20px] animate-spin" data-icon="progress_activity">progress_activity</span>
+          <span>Requesting OS Handshake...</span>
+        `;
+        setTimeout(() => {
+          grantBtn.innerHTML = `
+            <span class="material-symbols-outlined text-[20px]" data-icon="check_circle">check_circle</span>
+            <span>Access Granted</span>
+          `;
+          grantBtn.classList.remove('bg-[#14171A]');
+          grantBtn.classList.add('bg-emerald-700');
+        }, 1200);
+      }
+    });
+  </script>
+</body></html>

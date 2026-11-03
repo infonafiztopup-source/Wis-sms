@@ -1,0 +1,8 @@
+{
+  "name": "Wisfy SMS",
+  "description": "Open-source, backend-free Android SMS-to-Webhook application developed by Shahria Nafiz Sajjad.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
