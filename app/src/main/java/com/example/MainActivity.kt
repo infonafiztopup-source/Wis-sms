@@ -121,7 +121,28 @@ enum class NavigationTab {
 }
 
 @Composable
+@Composable
 fun WisfyAppRoot(viewModel: WisfyViewModel) {
+    var showSplash by remember { mutableStateOf(true) }
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(1450)
+        showSplash = false
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        WisfyAppContent(viewModel)
+        androidx.compose.animation.AnimatedVisibility(
+            visible = showSplash,
+            exit = androidx.compose.animation.fadeOut(
+                animationSpec = androidx.compose.animation.core.tween(320)
+            )
+        ) {
+            WisfySplashScreen()
+        }
+    }
+}
+
+@Composable
+private fun WisfyAppContent(viewModel: WisfyViewModel) {
     val settings by viewModel.settings.collectAsState()
     val endpoints by viewModel.endpoints.collectAsState()
     val events by viewModel.events.collectAsState()
