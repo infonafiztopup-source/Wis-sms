@@ -138,7 +138,7 @@ fun WisfyFixedTopNav(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .clip(RoundedCornerShape(9999.dp))
-                                .background(if (isDaemonActive) EmeraldLight else Color(0xFFF1F5F9))
+                                .background(if (isDaemonActive) EmeraldLight else Color(0xFFF0EEE7))
                                 .border(
                                     1.dp,
                                     Brush.verticalGradient(
@@ -160,7 +160,7 @@ fun WisfyFixedTopNav(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = if (isDaemonActive) "TLS 1.3 SECURE" else "STANDBY",
+                                text = if (isDaemonActive) "GATEWAY ACTIVE" else "STANDBY",
                                 fontSize = 9.sp,
                                 fontFamily = FontFamily.Monospace,
                                 fontWeight = FontWeight.Bold,
@@ -232,7 +232,7 @@ fun WisfyFixedTopNav(
                         Icon(
                             imageVector = Icons.Default.Code,
                             contentDescription = "API Docs",
-                            tint = ObsidianBlack,
+                            tint = TextPrimary,
                             modifier = Modifier.size(15.dp)
                         )
                     }
@@ -252,9 +252,9 @@ fun WisfyFixedTopNav(
                         .background(
                             Brush.verticalGradient(
                                 listOf(
-                                    Color(0xFF22C55E),
-                                    Color(0xFF16A34A),
-                                    Color(0xFF15803D)
+                                    Color(0xFF34D399),
+                                    Color(0xFF087F5B),
+                                    Color(0xFF086747)
                                 )
                             )
                         )

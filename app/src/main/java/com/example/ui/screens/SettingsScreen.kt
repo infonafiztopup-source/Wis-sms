@@ -187,7 +187,7 @@ fun SettingsScreen(
                                 .clip(RoundedCornerShape(10.dp))
                                 .background(
                                     if (isSelected) {
-                                        if (colors.isDark) Color(0xFF10B981) else Color(0xFF0F172A)
+                                        if (colors.isDark) Color(0xFF34D399) else Color(0xFF202A23)
                                     } else {
                                         Color.Transparent
                                     }

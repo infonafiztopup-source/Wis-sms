@@ -122,6 +122,26 @@ enum class NavigationTab {
 
 @Composable
 fun WisfyAppRoot(viewModel: WisfyViewModel) {
+    var showSplash by remember { mutableStateOf(true) }
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(1450)
+        showSplash = false
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        WisfyAppContent(viewModel)
+        androidx.compose.animation.AnimatedVisibility(
+            visible = showSplash,
+            exit = androidx.compose.animation.fadeOut(
+                animationSpec = androidx.compose.animation.core.tween(320)
+            )
+        ) {
+            WisfySplashScreen()
+        }
+    }
+}
+
+@Composable
+private fun WisfyAppContent(viewModel: WisfyViewModel) {
     val settings by viewModel.settings.collectAsState()
     val endpoints by viewModel.endpoints.collectAsState()
     val events by viewModel.events.collectAsState()
@@ -429,13 +449,13 @@ private fun BottomNavItem(
                     Brush.verticalGradient(
                         if (isDark) {
                             listOf(
-                                Color(0xFF10B981),
-                                Color(0xFF059669)
+                                Color(0xFF34D399),
+                                Color(0xFF087F5B)
                             )
                         } else {
                             listOf(
-                                Color(0xFF0F172A),
-                                Color(0xFF1E293B)
+                                Color(0xFF202A23),
+                                Color(0xFF141C17)
                             )
                         }
                     )
