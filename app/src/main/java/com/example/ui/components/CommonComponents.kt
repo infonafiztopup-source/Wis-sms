@@ -133,17 +133,17 @@ fun WisfyButton(
         ButtonVariant.PRIMARY -> {
             if (!enabled) {
                 Triple(
-                    SolidColor(if (isDark) Color(0xFF1E293B) else Color(0xFFE2E8F0)),
+                    SolidColor(if (isDark) Color(0xFF243329) else Color(0xFFE8E4DA)),
                     SolidColor(Color.Transparent),
-                    if (isDark) Color(0xFF64748B) else Color(0xFF94A3B8)
+                    if (isDark) Color(0xFF778579) else Color(0xFF969B91)
                 )
             } else {
                 Triple(
                     Brush.verticalGradient(
                         if (isDark) {
-                            listOf(Color(0xFF10B981), Color(0xFF059669))
+                            listOf(Color(0xFF34D399), Color(0xFF087F5B))
                         } else {
-                            listOf(Color(0xFF0F172A), Color(0xFF1E293B))
+                            listOf(Color(0xFF202A23), Color(0xFF141C17))
                         }
                     ),
                     SolidColor(Color.Transparent),
@@ -153,15 +153,15 @@ fun WisfyButton(
         }
         ButtonVariant.SECONDARY -> {
             Triple(
-                SolidColor(if (isDark) Color(0xFF161F2C) else Color(0xFFF1F5F9)),
-                SolidColor(if (isDark) Color(0xFF263445) else Color(0xFFE2E8F0)),
+                SolidColor(if (isDark) Color(0xFF19231C) else Color(0xFFF0EEE7)),
+                SolidColor(if (isDark) Color(0xFF29372D) else Color(0xFFE6E1D7)),
                 TextPrimary
             )
         }
         ButtonVariant.OUTLINE -> {
             Triple(
                 SolidColor(Color.Transparent),
-                SolidColor(if (isDark) Color(0xFF334358) else Color(0xFFCBD5E1)),
+                SolidColor(if (isDark) Color(0xFF3A4A3E) else Color(0xFFD5CFC3)),
                 TextPrimary
             )
         }
