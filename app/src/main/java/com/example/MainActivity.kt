@@ -69,6 +69,7 @@ import androidx.compose.ui.unit.sp
 import com.example.data.local.entities.DeliveryLogEntity
 import com.example.data.local.entities.SmsEventEntity
 import com.example.data.local.entities.WebhookEndpointEntity
+import com.example.ui.components.ThemeSweepRevealOverlay
 import com.example.ui.components.WisfyFixedTopNav
 import com.example.ui.dialogs.AddEndpointDialog
 import com.example.ui.dialogs.DocsDialog
@@ -152,6 +153,15 @@ fun WisfyAppRoot(viewModel: WisfyViewModel) {
     val failedCount by viewModel.failedCount.collectAsState()
     val totalCount by viewModel.totalLogsCount.collectAsState()
 
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val prefs = remember(context) { context.getSharedPreferences("wisfy_user_prefs", android.content.Context.MODE_PRIVATE) }
+    var userDisplayName by remember {
+        mutableStateOf(
+            prefs.getString("pref_user_name", null)
+                ?: android.os.Build.MODEL.ifBlank { "Merchant" }
+        )
+    }
+
     var showAppEnteringSplash by remember { mutableStateOf(true) }
     var onboardingStep by remember { mutableStateOf(OnboardingStep.WELCOME) }
     var currentTab by remember { mutableStateOf(NavigationTab.DASHBOARD) }
@@ -181,7 +191,12 @@ fun WisfyAppRoot(viewModel: WisfyViewModel) {
             when (onboardingStep) {
                 OnboardingStep.WELCOME -> {
                     WelcomeScreen(
-                        onContinue = { onboardingStep = OnboardingStep.PERMISSIONS }
+                        initialName = userDisplayName,
+                        onContinue = { chosenName ->
+                            userDisplayName = chosenName
+                            prefs.edit().putString("pref_user_name", chosenName).apply()
+                            onboardingStep = OnboardingStep.PERMISSIONS
+                        }
                     )
                 }
                 OnboardingStep.PERMISSIONS -> {
@@ -204,21 +219,29 @@ fun WisfyAppRoot(viewModel: WisfyViewModel) {
             }
         }
 
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            containerColor = WarmSurface,
-            topBar = {
-                WisfyFixedTopNav(
-                    isDaemonActive = settings?.backgroundServiceActive ?: true,
-                    onSimulateClick = { showSimulateSmsDialog = true },
-                    onDocsClick = { showDocsDialog = true },
-                    onAddEndpointClick = {
-                        endpointToEdit = null
-                        showAddEndpointDialog = true
-                    },
-                    onSettingsClick = { currentTab = NavigationTab.SETTINGS }
-                )
-            },
+        val isDarkTheme = com.example.ui.theme.LocalWisfyColors.current.isDark
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                containerColor = WarmSurface,
+                topBar = {
+                    WisfyFixedTopNav(
+                        isDaemonActive = settings?.backgroundServiceActive ?: true,
+                        onSimulateClick = { showSimulateSmsDialog = true },
+                        onDocsClick = { showDocsDialog = true },
+                        onAddEndpointClick = {
+                            endpointToEdit = null
+                            showAddEndpointDialog = true
+                        },
+                        onSettingsClick = { currentTab = NavigationTab.SETTINGS },
+                        onToggleTheme = {
+                            val nextMode = if (isDarkTheme) "LIGHT" else "DARK"
+                            viewModel.setThemeMode(nextMode)
+                        },
+                        userName = userDisplayName
+                    )
+                },
             bottomBar = {
                 WisfyBottomBar(
                     currentTab = currentTab,
@@ -330,6 +353,9 @@ fun WisfyAppRoot(viewModel: WisfyViewModel) {
                 }
             }
         }
+
+        // Liquid Circular Reveal Theme Sweep Overlay originating from Top-Right Toggle Button
+        ThemeSweepRevealOverlay(isDark = isDarkTheme)
     }
 
     // Dialogs

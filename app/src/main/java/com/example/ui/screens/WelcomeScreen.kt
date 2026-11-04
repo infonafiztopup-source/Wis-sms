@@ -45,12 +45,24 @@ import com.example.ui.theme.LocalWisfyColors
 import com.example.ui.theme.WisfyShapes
 import com.example.ui.theme.WisfySpacing
 
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.example.ui.components.WisfyCard
+import com.example.ui.theme.JetBrainsMonoFontFamily
+
 @Composable
 fun WelcomeScreen(
-    onContinue: () -> Unit
+    onContinue: (String) -> Unit = {},
+    initialName: String = android.os.Build.MODEL.ifBlank { "Merchant" }
 ) {
     val scrollState = rememberScrollState()
     val colors = LocalWisfyColors.current
+    var enteredName by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -116,7 +128,54 @@ fun WelcomeScreen(
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // User / Merchant Display Name Input Card
+            WisfyCard(
+                modifier = Modifier.fillMaxWidth(),
+                backgroundColor = colors.surfaceCard,
+                borderColor = colors.border,
+                cornerRadius = 20.dp
+            ) {
+                Column(modifier = Modifier.padding(18.dp)) {
+                    Text(
+                        text = "YOUR NAME / DEVICE NAME",
+                        fontFamily = JetBrainsMonoFontFamily,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.textMuted,
+                        letterSpacing = 0.5.sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = enteredName,
+                        onValueChange = { enteredName = it },
+                        placeholder = {
+                            Text(
+                                text = initialName,
+                                fontFamily = InterFontFamily,
+                                fontSize = 14.sp,
+                                color = colors.textMuted
+                            )
+                        },
+                        singleLine = true,
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("welcome_name_input"),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = colors.surfaceHighlight,
+                            unfocusedContainerColor = colors.surfaceHighlight,
+                            focusedBorderColor = colors.emerald,
+                            unfocusedBorderColor = colors.border,
+                            focusedTextColor = colors.textPrimary,
+                            unfocusedTextColor = colors.textPrimary
+                        )
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             // 3 feature rows in a layered card (Local-first, Secure HTTPS, OTP-aware)
             WisfyLayeredCard(
@@ -157,7 +216,10 @@ fun WelcomeScreen(
         ) {
             WisfyCtaButton(
                 text = "Get started",
-                onClick = onContinue,
+                onClick = {
+                    val finalName = enteredName.trim().ifBlank { initialName }
+                    onContinue(finalName)
+                },
                 testTag = "welcome_continue_btn"
             )
         }

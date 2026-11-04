@@ -22,18 +22,34 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,7 +70,8 @@ fun WisfyFixedTopNav(
     onDocsClick: () -> Unit = {},
     onAddEndpointClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
-    userName: String = "Nafiz",
+    onToggleTheme: () -> Unit = {},
+    userName: String = android.os.Build.MODEL.ifBlank { "Merchant" },
     modifier: Modifier = Modifier
 ) {
     val colors = LocalWisfyColors.current
@@ -134,10 +151,115 @@ fun WisfyFixedTopNav(
                     )
                 }
 
+                val haptic = LocalHapticFeedback.current
+                val isDark = colors.isDark
+
+                // Smooth 360-degree rotation animation for theme icon
+                val rotationAngle by animateFloatAsState(
+                    targetValue = if (isDark) 360f else 0f,
+                    animationSpec = spring(
+                        dampingRatio = 0.65f,
+                        stiffness = 360f
+                    ),
+                    label = "themeRotate"
+                )
+
+                // Expanding celestial radiant aura ripple on theme switch
+                val rippleEffect = remember { Animatable(0f) }
+                LaunchedEffect(isDark) {
+                    rippleEffect.snapTo(0f)
+                    rippleEffect.animateTo(
+                        targetValue = 1f,
+                        animationSpec = tween(500, easing = FastOutSlowInEasing)
+                    )
+                }
+
+                // Theme Toggle Container with Radiant Halo & Specular Glass Tile
+                Box(contentAlignment = Alignment.Center) {
+                    // Expanding Luminous Pulse Ring
+                    if (rippleEffect.value in 0.01f..0.99f) {
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .scale(1f + rippleEffect.value * 0.85f)
+                                .clip(CircleShape)
+                                .background(
+                                    if (isDark) Color(0xFFFACC15).copy(alpha = (1f - rippleEffect.value) * 0.42f)
+                                    else Color(0xFF60A5FA).copy(alpha = (1f - rippleEffect.value) * 0.38f)
+                                )
+                        )
+                    }
+
+                    // Interactive Theme Toggle Button
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .shadow(
+                                elevation = 4.dp,
+                                shape = CircleShape,
+                                ambientColor = Color(0x24000000),
+                                spotColor = Color(0x38000000)
+                            )
+                            .clip(CircleShape)
+                            .background(colors.surfaceCard)
+                            .border(
+                                1.dp,
+                                if (isDark) Color(0x33FACC15) else colors.border,
+                                CircleShape
+                            )
+                            .clickable {
+                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                onToggleTheme()
+                            }
+                            .testTag("top_nav_theme_toggle_btn"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Box(
+                            modifier = Modifier.rotate(rotationAngle),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            AnimatedContent(
+                                targetState = isDark,
+                                transitionSpec = {
+                                    (fadeIn(tween(220, easing = FastOutSlowInEasing)) +
+                                            scaleIn(initialScale = 0.45f, animationSpec = spring(0.68f, 400f)))
+                                        .togetherWith(
+                                            fadeOut(tween(150, easing = FastOutSlowInEasing)) +
+                                                    scaleOut(targetScale = 0.45f)
+                                        )
+                                },
+                                label = "themeIconContent"
+                            ) { dark ->
+                                if (dark) {
+                                    Icon(
+                                        imageVector = Icons.Default.LightMode,
+                                        contentDescription = "Switch to Light Theme",
+                                        tint = Color(0xFFFACC15),
+                                        modifier = Modifier.size(19.dp)
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Default.DarkMode,
+                                        contentDescription = "Switch to Dark Theme",
+                                        tint = Color(0xFF4B5563),
+                                        modifier = Modifier.size(19.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Docs / Quick Info Icon Button
                 Box(
                     modifier = Modifier
                         .size(36.dp)
+                        .shadow(
+                            elevation = 3.dp,
+                            shape = CircleShape,
+                            ambientColor = Color(0x1F000000),
+                            spotColor = Color(0x2E000000)
+                        )
                         .clip(CircleShape)
                         .background(colors.surfaceCard)
                         .border(1.dp, colors.border, CircleShape)

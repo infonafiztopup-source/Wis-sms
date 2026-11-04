@@ -154,7 +154,10 @@ val DarkWisfyColors = WisfyColors(
 @Composable
 fun animateWisfyColorsAsState(
     target: WisfyColors,
-    animationSpec: AnimationSpec<Color> = tween(durationMillis = 260)
+    animationSpec: AnimationSpec<Color> = tween(
+        durationMillis = 350,
+        easing = androidx.compose.animation.core.FastOutSlowInEasing
+    )
 ): WisfyColors {
     val background by animateColorAsState(target.background, animationSpec, label = "bg")
     val surface by animateColorAsState(target.surface, animationSpec, label = "surface")
