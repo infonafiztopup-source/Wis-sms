@@ -15,6 +15,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import com.example.ui.components.AppEnteringSplash
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -22,6 +23,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -378,64 +382,123 @@ fun WisfyBottomBar(
     onTabSelected: (NavigationTab) -> Unit
 ) {
     val isDark = com.example.ui.theme.LocalWisfyColors.current.isDark
+    val haptic = LocalHapticFeedback.current
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .navigationBarsPadding()
-            .padding(bottom = 12.dp),
+            .padding(bottom = 16.dp),
         contentAlignment = Alignment.Center
     ) {
-        // Floating Solid Black Pill Navigation (Salung Reference: Black Pill with Sliding White Circle)
+        // Ultra-Premium Floating Obsidian Pill Navigation (Salung Reference with Specular Bevel & Active Capsule)
         Box(
             modifier = Modifier
-                .widthIn(min = 260.dp, max = 290.dp)
-                .fillMaxWidth(0.68f)
-                .height(64.dp)
+                .widthIn(min = 280.dp, max = 310.dp)
+                .fillMaxWidth(0.72f)
+                .height(66.dp)
                 .shadow(
-                    elevation = 14.dp,
+                    elevation = 20.dp,
                     shape = RoundedCornerShape(9999.dp),
-                    ambientColor = Color(0x66000000),
-                    spotColor = Color(0x80000000)
+                    ambientColor = Color(0x73000000),
+                    spotColor = Color(0xA6000000)
                 )
                 .clip(RoundedCornerShape(9999.dp))
-                .background(Color(0xFF000000))
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFF222226),
+                            Color(0xFF131316),
+                            Color(0xFF08080A)
+                        )
+                    )
+                )
                 .border(
-                    1.dp,
-                    if (isDark) Color(0x2EFFFFFF) else Color(0x1AFFFFFF),
+                    1.2.dp,
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0x38FFFFFF),
+                            Color(0x14FFFFFF),
+                            Color(0x06FFFFFF)
+                        )
+                    ),
                     RoundedCornerShape(9999.dp)
                 )
                 .padding(horizontal = 8.dp),
             contentAlignment = Alignment.CenterStart
         ) {
+            // Subtle top chamfer specular highlight line
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .align(Alignment.TopCenter)
+                    .background(
+                        Brush.horizontalGradient(
+                            listOf(
+                                Color.Transparent,
+                                Color(0x20FFFFFF),
+                                Color(0x55FFFFFF),
+                                Color(0x20FFFFFF),
+                                Color.Transparent
+                            )
+                        )
+                    )
+            )
+
             BoxWithConstraints(
                 modifier = Modifier.fillMaxSize()
             ) {
                 val totalWidth = maxWidth
                 val tabCount = 4
                 val tabWidth = totalWidth / tabCount
-                val activeCircleSize = 46.dp
+                val activePillWidth = 52.dp
+                val activePillHeight = 48.dp
 
-                // Sliding white circle indicator with spring physics
-                val targetOffsetX = tabWidth * currentTab.ordinal + (tabWidth - activeCircleSize) / 2
+                // Sliding white capsule indicator with spring physics
+                val targetOffsetX = tabWidth * currentTab.ordinal + (tabWidth - activePillWidth) / 2
                 val animatedOffsetX by animateDpAsState(
                     targetValue = targetOffsetX,
                     animationSpec = spring(
-                        dampingRatio = 0.82f,
+                        dampingRatio = 0.78f,
                         stiffness = 420f
                     ),
                     label = "navCircleSlide"
                 )
 
-                // White circle for active tab
+                // White capsule with porcelain finish, inner bevel & micro emerald indicator
                 Box(
                     modifier = Modifier
                         .offset(x = animatedOffsetX)
-                        .size(activeCircleSize)
-                        .clip(CircleShape)
-                        .background(Color(0xFFFFFFFF))
-                        .shadow(4.dp, CircleShape)
-                )
+                        .size(width = activePillWidth, height = activePillHeight)
+                        .align(Alignment.CenterStart)
+                        .shadow(
+                            elevation = 8.dp,
+                            shape = RoundedCornerShape(20.dp),
+                            spotColor = Color(0x4D000000),
+                            ambientColor = Color(0x26000000)
+                        )
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color(0xFFFFFFFF),
+                                    Color(0xFFF2F2F6)
+                                )
+                            )
+                        )
+                        .border(1.dp, Color(0xFFFFFFFF), RoundedCornerShape(20.dp)),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    // Electric Emerald Micro Accent Indicator at the bottom of active pill
+                    Box(
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                            .size(width = 8.dp, height = 3.dp)
+                            .clip(CircleShape)
+                            .background(EmeraldGreen)
+                    )
+                }
 
                 // 4 Interactive Tab Slots with testTags & contentDescriptions preserved
                 Row(
@@ -451,6 +514,15 @@ fun WisfyBottomBar(
 
                     tabs.forEach { (tab, icon, tag) ->
                         val isSelected = currentTab == tab
+                        val iconScale by animateFloatAsState(
+                            targetValue = if (isSelected) 1.08f else 1.0f,
+                            animationSpec = spring(
+                                dampingRatio = 0.72f,
+                                stiffness = 420f
+                            ),
+                            label = "navIconScale"
+                        )
+
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -458,17 +530,30 @@ fun WisfyBottomBar(
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null,
-                                    onClick = { onTabSelected(tab) }
+                                    onClick = {
+                                        if (currentTab != tab) {
+                                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                            onTabSelected(tab)
+                                        }
+                                    }
                                 )
                                 .testTag(tag),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(
-                                imageVector = icon,
-                                contentDescription = tab.name.replace("_", " "),
-                                tint = if (isSelected) Color(0xFF000000) else Color(0xFF8E8E93),
-                                modifier = Modifier.size(22.dp)
-                            )
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier.padding(bottom = if (isSelected) 3.dp else 0.dp)
+                            ) {
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = tab.name.replace("_", " "),
+                                    tint = if (isSelected) Color(0xFF09090B) else Color(0xFF8E8E93),
+                                    modifier = Modifier
+                                        .size(23.dp)
+                                        .scale(iconScale)
+                                )
+                            }
                         }
                     }
                 }

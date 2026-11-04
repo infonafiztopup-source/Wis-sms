@@ -181,26 +181,12 @@ fun AppEnteringSplash(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(horizontal = 32.dp)
         ) {
-            // Flame Emblem from user SVG
-            Box(
-                modifier = Modifier
-                    .size(68.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(if (isDark) Color(0xFF151517) else Color(0xFF1A1A1C))
-                    .border(
-                        1.dp,
-                        if (isDark) Color(0xFF2A2A2E) else Color(0x33FFFFFF),
-                        RoundedCornerShape(20.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.ic_wisfy_flame),
-                    contentDescription = null,
-                    tint = PureWhite,
-                    modifier = Modifier.size(34.dp)
-                )
-            }
+            // Luminous Flame Emblem
+            WisfyLogoBadge(
+                size = 72.dp,
+                logoSize = 40.dp,
+                cornerRadius = 22.dp
+            )
 
             Spacer(modifier = Modifier.height(28.dp))
 

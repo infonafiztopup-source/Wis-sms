@@ -32,10 +32,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.graphics.Brush
 import com.example.ui.components.WisfyBrandShape
 import com.example.ui.components.WisfyCtaButton
 import com.example.ui.components.WisfyIconTile
 import com.example.ui.components.WisfyLayeredCard
+import com.example.ui.components.WisfyLogoBadge
 import com.example.ui.theme.EmeraldGreen
 import com.example.ui.theme.InterFontFamily
 import com.example.ui.theme.LocalWisfyColors
@@ -64,24 +67,26 @@ fun WelcomeScreen(
         ) {
             Spacer(modifier = Modifier.height(28.dp))
 
-            // Logo mark in a white icon tile with soft glow (Flame icon)
+            // Logo mark in a luxury squircle emblem with subtle ambient emerald halo
             Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .shadow(
-                        elevation = 12.dp,
-                        shape = WisfyShapes.OuterCard,
-                        ambientColor = Color(0x26000000),
-                        spotColor = Color(0x33000000)
-                    )
-                    .clip(WisfyShapes.OuterCard)
-                    .background(colors.surfaceCard)
-                    .border(1.dp, colors.border, WisfyShapes.OuterCard),
                 contentAlignment = Alignment.Center
             ) {
-                WisfyBrandShape(
-                    modifier = Modifier.size(44.dp),
-                    contentDescription = "Wisfy Flame Logo"
+                // Subtle emerald ambient glow bloom
+                Box(
+                    modifier = Modifier
+                        .size(96.dp)
+                        .background(
+                            brush = Brush.radialGradient(
+                                colors = listOf(Color(0x3822B80F), Color(0x1022B80F), Color.Transparent)
+                            ),
+                            shape = CircleShape
+                        )
+                )
+
+                WisfyLogoBadge(
+                    size = 84.dp,
+                    logoSize = 46.dp,
+                    cornerRadius = 24.dp
                 )
             }
 

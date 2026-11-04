@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
@@ -9,8 +10,35 @@
         android:scaleY="0.68"
         android:translateX="20"
         android:translateY="18">
+        <!-- Outer Flame with Emerald Luminescence Gradient -->
         <path
-            android:fillColor="#FFFFFFFF"
-            android:pathData="M49.5,87.5 C36,78.5 27,66.5 27,53 C27,42.5 33,34 41.5,31 C40.8,36.5 43.5,41.5 47,43 C47.5,34 50.5,21.5 54.5,13 C59,25 68,43 72.8,54 C74.2,57.5 74.5,61.5 74,65.5 C73,73.5 68,81 61,87.5 C60.2,82.5 59.2,74 58.5,68.5 C57.8,62 55.5,56 55,52.5 C54.2,58 52.5,67 49.5,87.5 Z" />
+            android:pathData="M49.5,87.5 C36,78.5 27,66.5 27,53 C27,42.5 33,34 41.5,31 C40.8,36.5 43.5,41.5 47,43 C47.5,34 50.5,21.5 54.5,13 C59,25 68,43 72.8,54 C74.2,57.5 74.5,61.5 74,65.5 C73,73.5 68,81 61,87.5 C60.2,82.5 59.2,74 58.5,68.5 C57.8,62 55.5,56 55,52.5 C54.2,58 52.5,67 49.5,87.5 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:angle="270"
+                    android:startColor="#3DDC5A"
+                    android:centerColor="#22B80F"
+                    android:endColor="#137A0B"
+                    android:type="linear" />
+            </aapt:attr>
+        </path>
+
+        <!-- Inner Luminous Core with Mint-White Specular Depth -->
+        <path
+            android:pathData="M49.5,76 C42,69 36,60 36,50 C36,43 40,37 45,36 C44.5,40 46.5,43 48.5,44 C49,36 51,26 54,19 C57,28 63,42 66,50 C67,52.5 67,56 66.5,59 C65.5,65 62,71 57,76 C56.5,71 55.8,65 55.2,61 C54.7,56 53.2,51.5 52.8,49 C52.2,53.5 51.5,61.5 49.5,76 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:angle="270"
+                    android:startColor="#FFFFFFFF"
+                    android:centerColor="#E0F9DB"
+                    android:endColor="#803DDC5A"
+                    android:type="linear" />
+            </aapt:attr>
+        </path>
+
+        <!-- Specular Flare -->
+        <path
+            android:pathData="M54.5,13 C55.5,18 57.5,25 59.5,30 C57.5,26.5 55.5,21.5 54.5,13 Z"
+            android:fillColor="#80FFFFFF" />
     </group>
 </vector>

@@ -5,18 +5,26 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <!-- Deep Obsidian Carbon Background -->
     <path android:pathData="M0,0h108v108h-108z">
         <aapt:attr name="android:fillColor">
             <gradient
                 android:angle="270"
-                android:endColor="#111113"
-                android:startColor="#2C2C2E"
+                android:endColor="#0B0B0D"
+                android:startColor="#202024"
                 android:type="linear" />
         </aapt:attr>
     </path>
-    <!-- Subtle technical grid/rim accent -->
+
+    <!-- Subtle Specular Inner Halo -->
     <path
-        android:strokeWidth="1"
-        android:strokeColor="#1AFFFFFF"
-        android:pathData="M18,18h72v72h-72z" />
+        android:strokeWidth="1.2"
+        android:strokeColor="#24FFFFFF"
+        android:pathData="M24,24 A30,30 0 1,0 84,84 A30,30 0 1,0 24,24" />
+
+    <!-- Technical Micro Accent Crosshairs -->
+    <path
+        android:strokeWidth="0.8"
+        android:strokeColor="#18FFFFFF"
+        android:pathData="M54,16 L54,22 M54,86 L54,92 M16,54 L22,54 M86,54 L92,54" />
 </vector>

@@ -739,35 +739,70 @@ fun BrandTag(text: String, modifier: Modifier = Modifier) {
 }
 
 /**
- * Pure Borderless Dynamic Brand Logo (Dark / Light)
+ * Ultra-Premium Luminous Brand Flame Logo
  */
 @Composable
 fun WisfyBrandShape(
     modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified,
     contentDescription: String? = "Wisfy Flame Logo"
 ) {
-    val isDark = LocalWisfyColors.current.isDark
     Icon(
         painter = painterResource(id = R.drawable.ic_wisfy_flame),
         contentDescription = contentDescription,
-        tint = if (isDark) PureWhite else Color(0xFF111113),
+        tint = tint,
         modifier = modifier
     )
 }
 
+/**
+ * Ultra-Premium Squircle Brand Emblem Badge with Specular Rim & Ambient Glow
+ */
 @Composable
 fun WisfyLogoBadge(
     modifier: Modifier = Modifier,
-    size: Dp = 36.dp,
-    logoSize: Dp = 32.dp,
-    cornerRadius: Dp = 11.dp
+    size: Dp = 38.dp,
+    logoSize: Dp = 22.dp,
+    cornerRadius: Dp = 12.dp
 ) {
+    val isDark = LocalWisfyColors.current.isDark
+    val shape = RoundedCornerShape(cornerRadius)
+
     Box(
-        modifier = modifier.size(size),
+        modifier = modifier
+            .size(size)
+            .shadow(
+                elevation = 6.dp,
+                shape = shape,
+                ambientColor = Color(0x33000000),
+                spotColor = Color(0x40000000)
+            )
+            .clip(shape)
+            .background(
+                Brush.verticalGradient(
+                    if (isDark) {
+                        listOf(Color(0xFF242428), Color(0xFF141416), Color(0xFF0C0C0E))
+                    } else {
+                        listOf(Color(0xFFFFFFFF), Color(0xFFF2F2F5))
+                    }
+                )
+            )
+            .border(
+                1.dp,
+                Brush.verticalGradient(
+                    if (isDark) {
+                        listOf(Color(0x38FFFFFF), Color(0x14FFFFFF), Color(0x06FFFFFF))
+                    } else {
+                        listOf(Color(0xFFFFFFFF), Color(0xFFE2E2E6))
+                    }
+                ),
+                shape
+            ),
         contentAlignment = Alignment.Center
     ) {
         WisfyBrandShape(
             modifier = Modifier.size(logoSize),
+            tint = Color.Unspecified,
             contentDescription = "Wisfy Logo"
         )
     }

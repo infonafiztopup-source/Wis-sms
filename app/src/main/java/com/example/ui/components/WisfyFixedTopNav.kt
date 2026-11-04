@@ -84,20 +84,12 @@ fun WisfyFixedTopNav(
         ) {
             // Left: "Welcome, Name" Title + Small Flame Brand Emblem
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(colors.surfaceCard)
-                        .border(1.dp, colors.border, RoundedCornerShape(12.dp))
-                        .clickable(onClick = onDocsClick),
-                    contentAlignment = Alignment.Center
-                ) {
-                    WisfyBrandShape(
-                        modifier = Modifier.size(20.dp),
-                        contentDescription = "Wisfy Flame"
-                    )
-                }
+                WisfyLogoBadge(
+                    size = 38.dp,
+                    logoSize = 22.dp,
+                    cornerRadius = 12.dp,
+                    modifier = Modifier.clickable(onClick = onDocsClick)
+                )
 
                 Spacer(modifier = Modifier.width(10.dp))
 
