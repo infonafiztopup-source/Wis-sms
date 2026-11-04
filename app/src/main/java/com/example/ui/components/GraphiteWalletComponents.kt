@@ -258,10 +258,10 @@ fun WisfyMetalButton(
                 .scale(scale)
                 .size(48.dp)
                 .shadow(
-                    elevation = 4.dp,
+                    elevation = 6.dp,
                     shape = CircleShape,
                     ambientColor = Color(0x33000000),
-                    spotColor = Color(0x4D000000)
+                    spotColor = Color(0x59000000)
                 )
                 .clip(CircleShape)
                 .background(
@@ -269,7 +269,7 @@ fun WisfyMetalButton(
                         listOf(colors.metalTop, colors.metalBottom)
                     )
                 )
-                .border(1.dp, Color(0xE6FFFFFF), CircleShape)
+                .border(1.2.dp, Color(0xF0FFFFFF), CircleShape)
                 .pointerInput(Unit) {
                     while (true) {
                         awaitPointerEventScope {
@@ -288,6 +288,23 @@ fun WisfyMetalButton(
                 .testTag(testTag),
             contentAlignment = Alignment.Center
         ) {
+            // Turned-metal top specular glint
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .align(Alignment.TopCenter)
+                    .background(
+                        Brush.horizontalGradient(
+                            listOf(
+                                Color.Transparent,
+                                Color(0x99FFFFFF),
+                                Color.Transparent
+                            )
+                        )
+                    )
+            )
+
             Icon(
                 imageVector = icon,
                 contentDescription = label,
@@ -399,19 +416,50 @@ fun WisfyIconTile(
     size: Dp = 42.dp
 ) {
     val colors = LocalWisfyColors.current
+    val isDark = colors.isDark
+
     Box(
         modifier = modifier
             .size(size)
+            .shadow(
+                elevation = 3.dp,
+                shape = WisfyShapes.IconTile,
+                ambientColor = Color(0x18000000),
+                spotColor = Color(0x26000000)
+            )
             .clip(WisfyShapes.IconTile)
-            .background(containerColor)
-            .border(1.dp, colors.border, WisfyShapes.IconTile),
+            .background(
+                Brush.verticalGradient(
+                    if (isDark) {
+                        listOf(Color(0xFF26262B), Color(0xFF19191D))
+                    } else {
+                        listOf(Color(0xFFFFFFFF), Color(0xFFF7F7FA))
+                    }
+                )
+            )
+            .border(
+                1.dp,
+                if (isDark) Color(0x2EFFFFFF) else Color(0xFFE4E4E9),
+                WisfyShapes.IconTile
+            ),
         contentAlignment = Alignment.Center
     ) {
+        // Subtle tinted halo matching the icon's color
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(tint.copy(alpha = 0.16f), Color.Transparent)
+                    )
+                )
+        )
+
         Icon(
             imageVector = icon,
             contentDescription = null,
             tint = tint,
-            modifier = Modifier.size(size * 0.5f)
+            modifier = Modifier.size(size * 0.52f)
         )
     }
 }

@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Deep Obsidian Carbon Background -->
-    <path android:pathData="M0,0h108v108h-108z">
-        <aapt:attr name="android:fillColor">
-            <gradient
-                android:angle="270"
-                android:endColor="#0B0B0D"
-                android:startColor="#202024"
-                android:type="linear" />
-        </aapt:attr>
-    </path>
 
-    <!-- Subtle Specular Inner Halo -->
+    <!-- 1. Pure Crisp Porcelain White Canvas -->
+    <path
+        android:pathData="M0,0h108v108h-108z"
+        android:fillColor="#FFFFFFFF" />
+
+    <!-- 2. Subtle Precision Inner Halo -->
     <path
         android:strokeWidth="1.2"
-        android:strokeColor="#24FFFFFF"
-        android:pathData="M24,24 A30,30 0 1,0 84,84 A30,30 0 1,0 24,24" />
+        android:strokeColor="#0F000000"
+        android:pathData="M54,54m-40,0a40,40 0 1,1 80,0a40,40 0 1,1 -80,0" />
 
-    <!-- Technical Micro Accent Crosshairs -->
+    <!-- 3. Technical Micro Orbit Ring -->
     <path
         android:strokeWidth="0.8"
-        android:strokeColor="#18FFFFFF"
-        android:pathData="M54,16 L54,22 M54,86 L54,92 M16,54 L22,54 M86,54 L92,54" />
+        android:strokeColor="#12000000"
+        android:pathData="M54,54m-32,0a32,32 0 1,1 64,0a32,32 0 1,1 -64,0" />
+
+    <!-- 4. Subtle Technical Corner Ticks -->
+    <path
+        android:strokeWidth="1"
+        android:strokeColor="#14000000"
+        android:pathData="M54,12 L54,17 M54,91 L54,96 M12,54 L17,54 M91,54 L96,54" />
 </vector>
