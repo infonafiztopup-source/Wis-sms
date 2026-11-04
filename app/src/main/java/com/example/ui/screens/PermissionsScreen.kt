@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,19 +19,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BatterySaver
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Sms
-import androidx.compose.material.icons.filled.VerifiedUser
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,24 +32,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import com.example.ui.components.BrandTag
-import com.example.ui.components.ButtonVariant
-import com.example.ui.components.WisfyBrandShape
-import com.example.ui.components.WisfyButton
-import com.example.ui.components.WisfyCard
-import com.example.ui.theme.EmeraldDark
+import com.example.ui.components.WisfyCtaButton
+import com.example.ui.components.WisfyDeltaChip
+import com.example.ui.components.WisfyIconTile
+import com.example.ui.components.WisfyLayeredCard
+import com.example.ui.components.WisfyThinProgress
 import com.example.ui.theme.EmeraldGreen
 import com.example.ui.theme.InterFontFamily
-import com.example.ui.theme.JetBrainsMonoFontFamily
 import com.example.ui.theme.LocalWisfyColors
+import com.example.ui.theme.WisfySpacing
 
 @Composable
 fun PermissionsScreen(
@@ -74,13 +64,22 @@ fun PermissionsScreen(
         )
     }
 
-    var consentChecked by remember { mutableStateOf(true) }
+    var hasNotificationPermission by remember {
+        mutableStateOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+            } else true
+        )
+    }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val smsGranted = permissions[Manifest.permission.RECEIVE_SMS] == true
         hasSmsPermission = smsGranted
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            hasNotificationPermission = permissions[Manifest.permission.POST_NOTIFICATIONS] == true
+        }
         if (smsGranted) {
             onPermissionsGrantedOrSkipped()
         }
@@ -90,316 +89,172 @@ fun PermissionsScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(colors.canvasBackground)
-            .padding(horizontal = 20.dp, vertical = 16.dp)
+            .padding(horizontal = WisfySpacing.screenPadding, vertical = 20.dp)
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Step Indicator & Stepper Bar
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                BrandTag(text = "STEP 2 OF 2 • DEVICE PRIVACY")
-                WisfyBrandShape(modifier = Modifier.size(28.dp), contentDescription = "Wisfy Logo")
+                Text(
+                    text = "Step 2 of 2",
+                    fontFamily = InterFontFamily,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = colors.textSecondary
+                )
+                Text(
+                    text = "Device Access",
+                    fontFamily = InterFontFamily,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = colors.emerald
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            // Large Title Header
-            Text(
-                text = "Permissions & Privacy",
-                fontFamily = InterFontFamily,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = colors.textPrimary,
-                letterSpacing = (-0.6).sp
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                text = "Wisfy operates exclusively on-device. Review the background dispatch permissions required to relay payment SMS.",
-                fontFamily = InterFontFamily,
-                fontSize = 14.sp,
-                color = colors.textSecondary,
-                lineHeight = 20.sp
+            // Thin Stepper Progress Bar
+            WisfyThinProgress(
+                progress = 1.0f,
+                fillColor = colors.emerald
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Grouped Permissions Card
-            WisfyCard(
-                modifier = Modifier.fillMaxWidth(),
-                cornerRadius = 20.dp
-            ) {
-                Column(
-                    modifier = Modifier.padding(18.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    PermissionRowItem(
-                        icon = Icons.Default.Sms,
-                        iconColor = EmeraldGreen,
-                        iconBg = colors.statusSuccessBg,
-                        title = "SMS Event Listener",
-                        badgeText = if (hasSmsPermission) "GRANTED" else "REQUIRED",
-                        badgeIsGranted = hasSmsPermission,
-                        description = "Directly monitors incoming transactional SMS broadcasts and converts matching payloads into webhook events."
-                    )
+            // Title Header
+            Text(
+                text = "Required Access",
+                fontFamily = InterFontFamily,
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = colors.textPrimary,
+                letterSpacing = (-0.5).sp
+            )
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(colors.borderSubtle)
-                    )
+            Spacer(modifier = Modifier.height(6.dp))
 
-                    PermissionRowItem(
-                        icon = Icons.Default.BatterySaver,
-                        iconColor = Color(0xFFD97706),
-                        iconBg = if (colors.isDark) Color(0xFF1E293B) else Color(0xFFFEF3C7),
-                        title = "Battery Optimization Exemption",
-                        badgeText = "RECOMMENDED",
-                        badgeIsGranted = false,
-                        description = "Prevents Android from putting the background listener daemon to sleep during critical payment windows."
-                    )
+            Text(
+                text = "Wisfy runs strictly on-device. These permissions allow the local engine to parse messages and forward webhooks.",
+                fontFamily = InterFontFamily,
+                fontSize = 13.5.sp,
+                color = colors.textSecondary,
+                lineHeight = 19.sp
+            )
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(colors.borderSubtle)
-                    )
+            Spacer(modifier = Modifier.height(24.dp))
 
-                    PermissionRowItem(
-                        icon = Icons.Default.Shield,
-                        iconColor = Color(0xFF2563EB),
-                        iconBg = if (colors.isDark) Color(0xFF1E293B) else Color(0xFFEFF6FF),
-                        title = "Zero Cloud Intermediary",
-                        badgeText = "VERIFIED",
-                        badgeIsGranted = true,
-                        description = "Your sensitive SMS data never touches intermediate proxy clouds. Direct HTTPS dispatch straight to your server."
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Privacy Notice Card
-            WisfyCard(
-                modifier = Modifier.fillMaxWidth(),
-                cornerRadius = 16.dp
-            ) {
-                Row(
-                    modifier = Modifier.padding(14.dp),
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clip(CircleShape)
-                            .background(colors.statusSuccessBg),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Lock,
-                            contentDescription = null,
-                            tint = EmeraldDark,
-                            modifier = Modifier.size(15.dp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "Every dispatched SMS is inspectable in your local SMS Feed. Cryptographic endpoint keys are stored securely in Android KeyStore & SQLite.",
-                        fontFamily = InterFontFamily,
-                        fontSize = 12.sp,
-                        color = colors.textSecondary,
-                        lineHeight = 18.sp
-                    )
-                }
-            }
+            // Permission Card 1: SMS Ingestion
+            PermissionLayeredCard(
+                icon = Icons.Default.Sms,
+                title = "Receive & Read SMS",
+                reason = "Allows the background service to capture payment and OTP messages in real-time.",
+                isGranted = hasSmsPermission
+            )
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            // Authorization Consent Row
-            WisfyCard(
-                modifier = Modifier.fillMaxWidth(),
-                cornerRadius = 16.dp,
-                onClick = { consentChecked = !consentChecked }
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 14.dp, vertical = 12.dp)
-                ) {
-                    Checkbox(
-                        checked = consentChecked,
-                        onCheckedChange = { consentChecked = it },
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = EmeraldGreen,
-                            checkmarkColor = Color.White
-                        ),
-                        modifier = Modifier.testTag("consent_checkbox")
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "I authorize local SMS forwarding to configured webhooks",
-                        fontFamily = InterFontFamily,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = colors.textPrimary
-                    )
-                }
-            }
+            // Permission Card 2: Notifications
+            PermissionLayeredCard(
+                icon = Icons.Default.Notifications,
+                title = "Foreground Notification",
+                reason = "Keeps the local relay alive when running in the background.",
+                isGranted = hasNotificationPermission
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            // Permission Card 3: Battery Optimization
+            PermissionLayeredCard(
+                icon = Icons.Default.BatterySaver,
+                title = "Background Continuity",
+                reason = "Ensures Android does not put the SMS listener to sleep during idle state.",
+                isGranted = true
+            )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Bottom Action buttons
+        // Bottom CTA Buttons
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 28.dp, bottom = 12.dp)
         ) {
-            WisfyButton(
-                text = if (hasSmsPermission) "Access Granted • Continue" else "Allow SMS Permissions",
-                icon = if (hasSmsPermission) Icons.Default.CheckCircle else Icons.Default.Lock,
-                enabled = consentChecked,
+            WisfyCtaButton(
+                text = if (hasSmsPermission) "Continue to Dashboard" else "Grant Access",
                 onClick = {
-                    if (consentChecked) {
-                        val permissionsToRequest = mutableListOf(
+                    if (hasSmsPermission) {
+                        onPermissionsGrantedOrSkipped()
+                    } else {
+                        val toRequest = mutableListOf(
                             Manifest.permission.RECEIVE_SMS,
                             Manifest.permission.READ_SMS
                         )
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+                            toRequest.add(Manifest.permission.POST_NOTIFICATIONS)
                         }
-                        permissionLauncher.launch(permissionsToRequest.toTypedArray())
+                        permissionLauncher.launch(toRequest.toTypedArray())
                     }
                 },
-                variant = ButtonVariant.PRIMARY,
-                height = 46.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("grant_permissions_button")
+                testTag = "grant_permissions_btn"
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
-            // Secondary option for simulation & local testing
-            WisfyButton(
-                text = "Proceed to Dashboard (Simulation Mode)",
-                variant = ButtonVariant.SECONDARY,
-                height = 44.dp,
-                onClick = onPermissionsGrantedOrSkipped,
+            Text(
+                text = "Skip for now",
+                fontFamily = InterFontFamily,
+                fontSize = 13.5.sp,
+                fontWeight = FontWeight.Medium,
+                color = colors.textSecondary,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("skip_permissions_button")
+                    .clickable { onPermissionsGrantedOrSkipped() }
+                    .padding(vertical = 8.dp)
+                    .testTag("skip_permissions_btn")
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.VerifiedUser,
-                    contentDescription = null,
-                    tint = EmeraldGreen,
-                    modifier = Modifier.size(15.dp)
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "End-to-End Encrypted • Strict Local Execution",
-                    fontFamily = InterFontFamily,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colors.textMuted
-                )
-            }
-
-            Spacer(modifier = Modifier.height(6.dp))
         }
     }
 }
 
 @Composable
-private fun PermissionRowItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    iconColor: Color,
-    iconBg: Color,
+private fun PermissionLayeredCard(
+    icon: ImageVector,
     title: String,
-    badgeText: String,
-    badgeIsGranted: Boolean,
-    description: String
+    reason: String,
+    isGranted: Boolean
 ) {
     val colors = LocalWisfyColors.current
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top
+    WisfyLayeredCard(
+        icon = icon,
+        iconTint = if (isGranted) colors.emerald else colors.statusPending,
+        title = title
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(iconBg)
-                .border(1.dp, colors.borderSubtle, RoundedCornerShape(12.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = iconColor,
-                modifier = Modifier.size(20.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.width(14.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = title,
-                    fontFamily = InterFontFamily,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colors.textPrimary
-                )
-
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(9999.dp))
-                        .background(
-                            if (badgeIsGranted) colors.statusSuccessBg else colors.surfaceLow
-                        )
-                        .border(
-                            1.dp,
-                            if (badgeIsGranted) colors.statusSuccess.copy(alpha = 0.3f) else colors.borderSubtle,
-                            RoundedCornerShape(9999.dp)
-                        )
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
-                ) {
-                    Text(
-                        text = badgeText,
-                        fontSize = 9.sp,
-                        fontFamily = JetBrainsMonoFontFamily,
-                        fontWeight = FontWeight.Bold,
-                        color = if (badgeIsGranted) colors.statusSuccess else colors.textMuted
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(3.dp))
-
             Text(
-                text = description,
+                text = reason,
                 fontFamily = InterFontFamily,
-                fontSize = 12.sp,
+                fontSize = 12.5.sp,
                 color = colors.textSecondary,
-                lineHeight = 17.sp
+                lineHeight = 17.sp,
+                modifier = Modifier.weight(1f).padding(end = 10.dp)
+            )
+
+            WisfyDeltaChip(
+                text = if (isGranted) "Granted" else "Required",
+                isPositive = isGranted,
+                leadingArrow = false
             )
         }
     }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -294,9 +295,10 @@ fun DocsDialog(onDismiss: () -> Unit) {
     ) {
         Surface(
             modifier = Modifier
-                .fillMaxWidth(0.95f)
-                .clip(RoundedCornerShape(24.dp)),
-            color = Color.White
+                .fillMaxWidth()
+                .fillMaxHeight(0.92f),
+            shape = com.example.ui.theme.WisfyShapes.BottomSheetTop,
+            color = com.example.ui.theme.LocalWisfyColors.current.canvasBackground
         ) {
             Column(
                 modifier = Modifier

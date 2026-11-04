@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:width="76dp"
-        android:height="76dp"
-        android:drawable="@drawable/wisfy_logo"
-        android:gravity="center" />
-</layer-list>
-
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="0.68"
+        android:scaleY="0.68"
+        android:translateX="20"
+        android:translateY="18">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M49.5,87.5 C36,78.5 27,66.5 27,53 C27,42.5 33,34 41.5,31 C40.8,36.5 43.5,41.5 47,43 C47.5,34 50.5,21.5 54.5,13 C59,25 68,43 72.8,54 C74.2,57.5 74.5,61.5 74,65.5 C73,73.5 68,81 61,87.5 C60.2,82.5 59.2,74 58.5,68.5 C57.8,62 55.5,56 55,52.5 C54.2,58 52.5,67 49.5,87.5 Z" />
+    </group>
+</vector>

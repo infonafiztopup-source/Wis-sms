@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Wisfy Flame Silhouette from user svg -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M49.5,87.5 C36,78.5 27,66.5 27,53 C27,42.5 33,34 41.5,31 C40.8,36.5 43.5,41.5 47,43 C47.5,34 50.5,21.5 54.5,13 C59,25 68,43 72.8,54 C74.2,57.5 74.5,61.5 74,65.5 C73,73.5 68,81 61,87.5 C60.2,82.5 59.2,74 58.5,68.5 C57.8,62 55.5,56 55,52.5 C54.2,58 52.5,67 49.5,87.5 Z" />
+</vector>

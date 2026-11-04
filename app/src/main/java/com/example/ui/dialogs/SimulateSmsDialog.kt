@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -60,12 +61,16 @@ fun SimulateSmsDialog(
 
     val scrollState = rememberScrollState()
 
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)
+    ) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(24.dp)),
-            color = WarmSurface
+                .fillMaxHeight(0.88f),
+            shape = com.example.ui.theme.WisfyShapes.BottomSheetTop,
+            color = com.example.ui.theme.LocalWisfyColors.current.canvasBackground
         ) {
             Column(
                 modifier = Modifier

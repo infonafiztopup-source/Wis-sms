@@ -15,14 +15,14 @@ val PureWhite = Color(0xFFFFFFFF)
 val PureBlack = Color(0xFF000000)
 
 // Warning, Error & Info Colors
-val ErrorRed = Color(0xFFEF4444)
-val ErrorContainer = Color(0xFFFEF2F2)
-val AmberWarning = Color(0xFFF59E0B)
+val ErrorRed = Color(0xFFE5484D)
+val ErrorContainer = Color(0xFFFEE2E2)
+val AmberWarning = Color(0xFFF08A24)
 val AmberContainer = Color(0xFFFFFBEB)
-val InfoPurple = Color(0xFF8B5CF6)
-val InfoContainer = Color(0xFFF5F3FF)
+val InfoPurple = Color(0xFF4A6CF7)
+val InfoContainer = Color(0xFFEFF2FE)
 
-// Data structure holding all dynamic semantic colors
+// Data structure holding all dynamic semantic colors for "Graphite Wallet" design
 data class WisfyColors(
     val isDark: Boolean,
     val background: Color,
@@ -45,7 +45,22 @@ data class WisfyColors(
     val statusDelivered: Color,
     val statusPending: Color,
     val statusFailed: Color,
-    val statusDuplicate: Color
+    val statusDuplicate: Color,
+    // Graphite Wallet Specific Tokens
+    val heroGradientTop: Color = Color(0xFF2C2C2E),
+    val heroGradientBottom: Color = Color(0xFF111113),
+    val heroTexture: Color = Color(0x0FFFFFFF), // white @ 6%
+    val heroPillBg: Color = Color(0x14FFFFFF), // white @ 8%
+    val metalTop: Color = Color(0xFFFFFFFF),
+    val metalBottom: Color = Color(0xFFBDBDBD),
+    val ctaGradientTop: Color = Color(0xFF2A2A2C),
+    val ctaGradientBottom: Color = Color(0xFF0E0E10),
+    val navPill: Color = Color(0xFF000000),
+    val navActiveCircle: Color = Color(0xFFFFFFFF),
+    val navActiveIcon: Color = Color(0xFF000000),
+    val navInactiveIcon: Color = Color(0xFF8E8E93),
+    val chartBar: Color = Color(0xFF333333),
+    val chartGrid: Color = Color(0x0F000000)
 ) {
     val canvasBackground: Color get() = background
     val surfaceLow: Color get() = surfaceHighlight
@@ -56,56 +71,84 @@ data class WisfyColors(
     val statusErrorBg: Color get() = ErrorContainer
 }
 
-// Linear / Raycast Inspired Light Theme
+// "Graphite Wallet" Light Palette: Cool light-gray canvas, layered white cards, dark hero & cta
 val LightWisfyColors = WisfyColors(
     isDark = false,
-    background = Color(0xFFF8FAFC),
-    surface = Color(0xFFFFFFFF),
-    surfaceCard = Color(0xFFFFFFFF),
-    surfaceHighlight = Color(0xFFF1F5F9),
+    background = Color(0xFFE8E8E8), // Cool light-gray canvas
+    surface = Color(0xFFF7F7F7),    // Outer card
+    surfaceCard = Color(0xFFFFFFFF), // Inner card
+    surfaceHighlight = Color(0xFFEFEFEF),
     surfaceElevated = Color(0xFFFFFFFF),
-    border = Color(0xFFE2E8F0),
-    borderVariant = Color(0xFFCBD5E1),
-    borderActive = Color(0xFF10B981),
-    textPrimary = Color(0xFF0F172A),
-    textSecondary = Color(0xFF475569),
-    textMuted = Color(0xFF94A3B8),
-    emerald = Color(0xFF059669),
-    emeraldDark = Color(0xFF047857),
-    emeraldLight = Color(0xFFECFDF5),
-    emeraldBadge = Color(0xFFD1FAE5),
-    buttonPrimary = Color(0xFF0F172A),
+    border = Color(0xFFE2E2E4),
+    borderVariant = Color(0xFFD2D2D6),
+    borderActive = Color(0xFF22B80F),
+    textPrimary = Color(0xFF1A1A1A),
+    textSecondary = Color(0xFF6B6B70),
+    textMuted = Color(0xFF8E8E93),
+    emerald = Color(0xFF22B80F),
+    emeraldDark = Color(0xFF1A9A0C),
+    emeraldLight = Color(0xFFD6F2D0),
+    emeraldBadge = Color(0xFFC4EBBC),
+    buttonPrimary = Color(0xFF1A1A1C),
     buttonOnPrimary = Color(0xFFFFFFFF),
-    statusDelivered = Color(0xFF059669),
-    statusPending = Color(0xFFD97706),
-    statusFailed = Color(0xFFDC2626),
-    statusDuplicate = Color(0xFF7C3AED)
+    statusDelivered = Color(0xFF22B80F),
+    statusPending = Color(0xFFF08A24),
+    statusFailed = Color(0xFFE5484D),
+    statusDuplicate = Color(0xFF4A6CF7),
+    heroGradientTop = Color(0xFF2C2C2E),
+    heroGradientBottom = Color(0xFF111113),
+    heroTexture = Color(0x0FFFFFFF),
+    heroPillBg = Color(0x14FFFFFF),
+    metalTop = Color(0xFFFFFFFF),
+    metalBottom = Color(0xFFBDBDBD),
+    ctaGradientTop = Color(0xFF2A2A2C),
+    ctaGradientBottom = Color(0xFF0E0E10),
+    navPill = Color(0xFF000000),
+    navActiveCircle = Color(0xFFFFFFFF),
+    navActiveIcon = Color(0xFF000000),
+    navInactiveIcon = Color(0xFF8E8E93),
+    chartBar = Color(0xFF333333),
+    chartGrid = Color(0x0F000000)
 )
 
-// Linear / Raycast Deep Charcoal & Obsidian Dark Theme
+// "Graphite Wallet" Dark Palette: Intentional deep obsidian canvas, layered dark cards
 val DarkWisfyColors = WisfyColors(
     isDark = true,
-    background = Color(0xFF0C1017),
-    surface = Color(0xFF121822),
-    surfaceCard = Color(0xFF161F2C),
-    surfaceHighlight = Color(0xFF1E293B),
-    surfaceElevated = Color(0xFF1B2433),
-    border = Color(0xFF233042),
-    borderVariant = Color(0xFF334358),
-    borderActive = Color(0xFF10B981),
-    textPrimary = Color(0xFFF8FAFC),
-    textSecondary = Color(0xFF94A3B8),
-    textMuted = Color(0xFF64748B),
-    emerald = Color(0xFF10B981),
-    emeraldDark = Color(0xFF34D399),
-    emeraldLight = Color(0xFF064E3B).copy(alpha = 0.45f),
-    emeraldBadge = Color(0xFF065F46).copy(alpha = 0.55f),
-    buttonPrimary = Color(0xFF10B981),
-    buttonOnPrimary = Color(0xFF000000),
-    statusDelivered = Color(0xFF10B981),
-    statusPending = Color(0xFFF59E0B),
-    statusFailed = Color(0xFFEF4444),
-    statusDuplicate = Color(0xFFA78BFA)
+    background = Color(0xFF0B0B0C),
+    surface = Color(0xFF151517),    // Outer card
+    surfaceCard = Color(0xFF1D1D20), // Inner card
+    surfaceHighlight = Color(0xFF26262A),
+    surfaceElevated = Color(0xFF202024),
+    border = Color(0xFF2A2A2E),
+    borderVariant = Color(0xFF3A3A40),
+    borderActive = Color(0xFF3DDC5A),
+    textPrimary = Color(0xFFF5F5F7),
+    textSecondary = Color(0xFFA1A1A8),
+    textMuted = Color(0xFF6C6C74),
+    emerald = Color(0xFF3DDC5A),
+    emeraldDark = Color(0xFF6BE882),
+    emeraldLight = Color(0x243DDC5A), // 14%
+    emeraldBadge = Color(0x383DDC5A), // 22%
+    buttonPrimary = Color(0xFFF5F5F7),
+    buttonOnPrimary = Color(0xFF0B0B0C),
+    statusDelivered = Color(0xFF3DDC5A),
+    statusPending = Color(0xFFFFA94D),
+    statusFailed = Color(0xFFFF6B70),
+    statusDuplicate = Color(0xFF7C93FF),
+    heroGradientTop = Color(0xFF2C2C2E),
+    heroGradientBottom = Color(0xFF111113),
+    heroTexture = Color(0x14FFFFFF),
+    heroPillBg = Color(0x1AFFFFFF),
+    metalTop = Color(0xFFF2F2F4),
+    metalBottom = Color(0xFFA8A8AE),
+    ctaGradientTop = Color(0xFFFFFFFF),
+    ctaGradientBottom = Color(0xFFD9D9DE),
+    navPill = Color(0xFF000000),
+    navActiveCircle = Color(0xFFFFFFFF),
+    navActiveIcon = Color(0xFF000000),
+    navInactiveIcon = Color(0xFF8E8E93),
+    chartBar = Color(0xD9D4D4D8),
+    chartGrid = Color(0x1AFFFFFF)
 )
 
 @Composable
@@ -135,6 +178,21 @@ fun animateWisfyColorsAsState(
     val statusFailed by animateColorAsState(target.statusFailed, animationSpec, label = "statusFailed")
     val statusDuplicate by animateColorAsState(target.statusDuplicate, animationSpec, label = "statusDuplicate")
 
+    val heroGradientTop by animateColorAsState(target.heroGradientTop, animationSpec, label = "heroGradientTop")
+    val heroGradientBottom by animateColorAsState(target.heroGradientBottom, animationSpec, label = "heroGradientBottom")
+    val heroTexture by animateColorAsState(target.heroTexture, animationSpec, label = "heroTexture")
+    val heroPillBg by animateColorAsState(target.heroPillBg, animationSpec, label = "heroPillBg")
+    val metalTop by animateColorAsState(target.metalTop, animationSpec, label = "metalTop")
+    val metalBottom by animateColorAsState(target.metalBottom, animationSpec, label = "metalBottom")
+    val ctaGradientTop by animateColorAsState(target.ctaGradientTop, animationSpec, label = "ctaGradientTop")
+    val ctaGradientBottom by animateColorAsState(target.ctaGradientBottom, animationSpec, label = "ctaGradientBottom")
+    val navPill by animateColorAsState(target.navPill, animationSpec, label = "navPill")
+    val navActiveCircle by animateColorAsState(target.navActiveCircle, animationSpec, label = "navActiveCircle")
+    val navActiveIcon by animateColorAsState(target.navActiveIcon, animationSpec, label = "navActiveIcon")
+    val navInactiveIcon by animateColorAsState(target.navInactiveIcon, animationSpec, label = "navInactiveIcon")
+    val chartBar by animateColorAsState(target.chartBar, animationSpec, label = "chartBar")
+    val chartGrid by animateColorAsState(target.chartGrid, animationSpec, label = "chartGrid")
+
     return WisfyColors(
         isDark = target.isDark,
         background = background,
@@ -157,7 +215,21 @@ fun animateWisfyColorsAsState(
         statusDelivered = statusDelivered,
         statusPending = statusPending,
         statusFailed = statusFailed,
-        statusDuplicate = statusDuplicate
+        statusDuplicate = statusDuplicate,
+        heroGradientTop = heroGradientTop,
+        heroGradientBottom = heroGradientBottom,
+        heroTexture = heroTexture,
+        heroPillBg = heroPillBg,
+        metalTop = metalTop,
+        metalBottom = metalBottom,
+        ctaGradientTop = ctaGradientTop,
+        ctaGradientBottom = ctaGradientBottom,
+        navPill = navPill,
+        navActiveCircle = navActiveCircle,
+        navActiveIcon = navActiveIcon,
+        navInactiveIcon = navInactiveIcon,
+        chartBar = chartBar,
+        chartGrid = chartGrid
     )
 }
 

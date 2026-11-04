@@ -5,8 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,6 +31,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.NetworkPing
 import androidx.compose.material.icons.filled.SimCard
 import androidx.compose.material.icons.filled.Webhook
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Switch
@@ -55,10 +54,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.local.entities.WebhookEndpointEntity
 import com.example.network.DispatchResult
-import com.example.ui.components.ButtonVariant
-import com.example.ui.components.WisfyButton
-import com.example.ui.components.WisfyCard
+import com.example.ui.components.WisfyCtaButton
+import com.example.ui.components.WisfyDeltaChip
 import com.example.ui.components.WisfyEmptyState
+import com.example.ui.components.WisfyIconTile
+import com.example.ui.components.WisfyLayeredCard
 import com.example.ui.dialogs.WebhookTestResultDialog
 import com.example.ui.theme.EmeraldDark
 import com.example.ui.theme.EmeraldGreen
@@ -66,6 +66,8 @@ import com.example.ui.theme.ErrorRed
 import com.example.ui.theme.InterFontFamily
 import com.example.ui.theme.JetBrainsMonoFontFamily
 import com.example.ui.theme.LocalWisfyColors
+import com.example.ui.theme.WisfyShapes
+import com.example.ui.theme.WisfySpacing
 
 @Composable
 fun EndpointsScreen(
@@ -78,89 +80,100 @@ fun EndpointsScreen(
 ) {
     var inspectedTestResult by remember { mutableStateOf<Pair<WebhookEndpointEntity, DispatchResult>?>(null) }
     val colors = LocalWisfyColors.current
+    val activeCount = endpoints.count { it.enabled }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(colors.canvasBackground)
-            .padding(horizontal = 16.dp)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Title and Connect Button
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = WisfySpacing.screenPadding)
         ) {
-            Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
-                Text(
-                    text = "Webhook Endpoints",
-                    fontFamily = InterFontFamily,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colors.textPrimary,
-                    letterSpacing = (-0.4).sp
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "${endpoints.size} configured destinations",
-                    fontFamily = InterFontFamily,
-                    fontSize = 12.sp,
-                    color = colors.textSecondary
-                )
-            }
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
 
-            WisfyButton(
-                text = "Connect",
-                icon = Icons.Default.Add,
-                onClick = onAddEndpointClick,
-                variant = ButtonVariant.PRIMARY,
-                height = 40.dp,
-                testTag = "endpoints_add_button"
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (endpoints.isEmpty()) {
-            WisfyEmptyState(
-                icon = Icons.Default.Webhook,
-                title = "No Webhooks Configured",
-                subtitle = "Add your own HTTPS endpoint to forward incoming SMS events directly to your server or merchant gateway.",
-                actionText = "Connect Webhook",
-                onActionClick = onAddEndpointClick,
-                modifier = Modifier.padding(top = 24.dp)
-            )
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(endpoints, key = { it.id }) { endpoint ->
-                    AnimatedVisibility(
-                        visible = true,
-                        enter = fadeIn() + slideInVertically { 20 }
-                    ) {
-                        EndpointCard(
-                            endpoint = endpoint,
-                            onToggle = { onToggleEndpoint(endpoint) },
-                            onEdit = { onEditEndpointClick(endpoint) },
-                            onDelete = { onDeleteEndpointClick(endpoint.id) },
-                            onTest = { callback ->
-                                onTestEndpoint(endpoint) { result ->
-                                    callback(result)
-                                    inspectedTestResult = Pair(endpoint, result)
-                                }
-                            }
+                // Title and Active Count
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = "Webhook Endpoints",
+                            fontFamily = InterFontFamily,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = colors.textPrimary,
+                            letterSpacing = (-0.4).sp
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "$activeCount active · ${endpoints.size} configured",
+                            fontFamily = InterFontFamily,
+                            fontSize = 13.sp,
+                            color = colors.textSecondary
                         )
                     }
                 }
 
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            if (endpoints.isEmpty()) {
                 item {
-                    Spacer(modifier = Modifier.height(84.dp))
+                    WisfyLayeredCard(
+                        icon = Icons.Default.Webhook,
+                        title = "No Webhooks Configured",
+                        onChevronClick = onAddEndpointClick
+                    ) {
+                        WisfyEmptyState(
+                            icon = Icons.Default.Webhook,
+                            title = "No Destinations Found",
+                            subtitle = "Connect an HTTPS endpoint to forward incoming SMS messages to your server in real-time."
+                        )
+                    }
+                }
+            } else {
+                items(endpoints, key = { it.id }) { endpoint ->
+                    EndpointLayeredCard(
+                        endpoint = endpoint,
+                        onToggle = { onToggleEndpoint(endpoint) },
+                        onEdit = { onEditEndpointClick(endpoint) },
+                        onDelete = { onDeleteEndpointClick(endpoint.id) },
+                        onTest = { callback ->
+                            onTestEndpoint(endpoint) { result ->
+                                callback(result)
+                                inspectedTestResult = Pair(endpoint, result)
+                            }
+                        },
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
                 }
             }
+
+            // Bottom space for floating CTA + black nav
+            item {
+                Spacer(modifier = Modifier.height(140.dp))
+            }
+        }
+
+        // Bottom Floating Dark CTA Button
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 84.dp)
+        ) {
+            WisfyCtaButton(
+                text = "+ Add endpoint",
+                onClick = onAddEndpointClick,
+                testTag = "endpoints_add_button"
+            )
         }
     }
 
@@ -175,126 +188,40 @@ fun EndpointsScreen(
 }
 
 @Composable
-private fun EndpointCard(
+private fun EndpointLayeredCard(
     endpoint: WebhookEndpointEntity,
     onToggle: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
-    onTest: ((DispatchResult) -> Unit) -> Unit
+    onTest: ((DispatchResult) -> Unit) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    var isTesting by remember { mutableStateOf(false) }
     val colors = LocalWisfyColors.current
     val context = LocalContext.current
+    var isTesting by remember { mutableStateOf(false) }
 
-    WisfyCard(
-        modifier = Modifier.fillMaxWidth(),
-        cornerRadius = 18.dp
+    WisfyLayeredCard(
+        icon = Icons.Default.Webhook,
+        iconTint = if (endpoint.enabled) colors.emerald else colors.textMuted,
+        title = endpoint.name,
+        modifier = modifier
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            // Header Row: Endpoint Name, Badges & Switch
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
-                    Text(
-                        text = endpoint.name,
-                        fontFamily = InterFontFamily,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.textPrimary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // Auth Badge
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(6.dp))
-                                .background(if (endpoint.authToken.isNotBlank()) colors.statusSuccessBg else colors.surfaceLow)
-                                .border(
-                                    1.dp,
-                                    if (endpoint.authToken.isNotBlank()) colors.statusSuccess.copy(alpha = 0.3f) else colors.borderSubtle,
-                                    RoundedCornerShape(6.dp)
-                                )
-                                .padding(horizontal = 6.dp, vertical = 2.dp)
-                        ) {
-                            Text(
-                                text = if (endpoint.authToken.isNotBlank()) "BEARER AUTH" else "NO AUTH",
-                                fontSize = 9.sp,
-                                fontFamily = JetBrainsMonoFontFamily,
-                                fontWeight = FontWeight.Bold,
-                                color = if (endpoint.authToken.isNotBlank()) colors.statusSuccess else colors.textMuted
-                            )
-                        }
-
-                        // SIM Badge
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(6.dp))
-                                .background(colors.surfaceLow)
-                                .border(1.dp, colors.borderSubtle, RoundedCornerShape(6.dp))
-                                .padding(horizontal = 6.dp, vertical = 2.dp)
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = Icons.Default.SimCard,
-                                    contentDescription = null,
-                                    tint = EmeraldGreen,
-                                    modifier = Modifier.size(10.dp)
-                                )
-                                Spacer(modifier = Modifier.width(3.dp))
-                                Text(
-                                    text = when (endpoint.simSlot) {
-                                        1 -> "SIM 1"
-                                        2 -> "SIM 2"
-                                        else -> "BOTH SIMS"
-                                    },
-                                    fontSize = 9.sp,
-                                    fontFamily = JetBrainsMonoFontFamily,
-                                    fontWeight = FontWeight.Bold,
-                                    color = EmeraldDark
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Switch(
-                    checked = endpoint.enabled,
-                    onCheckedChange = { onToggle() },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = EmeraldGreen,
-                        uncheckedThumbColor = colors.textSecondary,
-                        uncheckedTrackColor = colors.surfaceLow
-                    ),
-                    modifier = Modifier.testTag("toggle_endpoint_${endpoint.id}")
-                )
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // URL Box with Copy
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // URL snippet box with copy
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(colors.surfaceLow)
-                    .border(1.dp, colors.borderSubtle, RoundedCornerShape(8.dp))
+                    .clip(WisfyShapes.ChevronButton)
+                    .background(colors.surfaceHighlight)
+                    .border(1.dp, colors.border, WisfyShapes.ChevronButton)
                     .padding(horizontal = 10.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = endpoint.url,
-                    fontSize = 12.sp,
                     fontFamily = JetBrainsMonoFontFamily,
+                    fontSize = 12.sp,
                     color = colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -306,114 +233,154 @@ private fun EndpointCard(
                     contentDescription = "Copy URL",
                     tint = colors.textMuted,
                     modifier = Modifier
-                        .size(14.dp)
+                        .size(15.dp)
                         .clickable {
                             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            clipboard.setPrimaryClip(ClipData.newPlainText("Webhook URL", endpoint.url))
+                            clipboard.setPrimaryClip(ClipData.newPlainText("URL", endpoint.url))
                             Toast.makeText(context, "URL copied", Toast.LENGTH_SHORT).show()
                         }
                 )
             }
 
-            // Sender whitelist chip if configured
-            if (endpoint.senderFilter.isNotBlank()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Filter: ",
-                        fontFamily = InterFontFamily,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = colors.textSecondary
-                    )
-                    Text(
-                        text = endpoint.senderFilter,
-                        fontSize = 11.sp,
-                        fontFamily = JetBrainsMonoFontFamily,
-                        color = EmeraldDark,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
-
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Last test outcome
-            if (endpoint.lastTestedAt != null) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+            // Metadata Badges (Auth, SIM, Filter)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Auth badge
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(if (endpoint.lastTestSuccess == true) colors.statusSuccessBg else colors.statusErrorBg)
-                        .border(
-                            1.dp,
-                            if (endpoint.lastTestSuccess == true) colors.statusSuccess.copy(alpha = 0.3f) else colors.statusError.copy(alpha = 0.3f),
-                            RoundedCornerShape(8.dp)
-                        )
-                        .padding(horizontal = 10.dp, vertical = 6.dp)
+                        .clip(WisfyShapes.Pill)
+                        .background(if (endpoint.authToken.isNotBlank()) colors.emeraldLight else colors.surfaceHighlight)
+                        .border(1.dp, if (endpoint.authToken.isNotBlank()) colors.emerald.copy(alpha = 0.3f) else colors.border, WisfyShapes.Pill)
+                        .padding(horizontal = 8.dp, vertical = 3.dp)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(6.dp)
-                            .clip(CircleShape)
-                            .background(if (endpoint.lastTestSuccess == true) EmeraldGreen else ErrorRed)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "Last Ping: " + (endpoint.lastTestMessage ?: if (endpoint.lastTestSuccess == true) "Success" else "Failed"),
-                        fontFamily = InterFontFamily,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = if (endpoint.lastTestSuccess == true) colors.statusSuccess else colors.statusError,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        text = if (endpoint.authToken.isNotBlank()) "BEARER AUTH" else "NO AUTH",
+                        fontFamily = JetBrainsMonoFontFamily,
+                        fontSize = 9.5.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (endpoint.authToken.isNotBlank()) colors.emeraldDark else colors.textMuted
                     )
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+
+                // SIM badge
+                Box(
+                    modifier = Modifier
+                        .clip(WisfyShapes.Pill)
+                        .background(colors.surfaceHighlight)
+                        .border(1.dp, colors.border, WisfyShapes.Pill)
+                        .padding(horizontal = 8.dp, vertical = 3.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.SimCard,
+                            contentDescription = null,
+                            tint = colors.textSecondary,
+                            modifier = Modifier.size(10.dp)
+                        )
+                        Spacer(modifier = Modifier.width(3.dp))
+                        Text(
+                            text = when (endpoint.simSlot) {
+                                1 -> "SIM 1"
+                                2 -> "SIM 2"
+                                else -> "BOTH SIMS"
+                            },
+                            fontFamily = JetBrainsMonoFontFamily,
+                            fontSize = 9.5.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.textSecondary
+                        )
+                    }
+                }
             }
 
-            // Action row: Test Webhook, Edit, Delete
+            if (endpoint.senderFilter.isNotBlank()) {
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "Filter: ${endpoint.senderFilter}",
+                    fontFamily = JetBrainsMonoFontFamily,
+                    fontSize = 11.sp,
+                    color = colors.emeraldDark,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Action row: Enable Switch + Test Webhook + Edit + Delete
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                WisfyButton(
-                    text = if (isTesting) "Testing..." else "Test Webhook",
-                    icon = if (isTesting) null else Icons.Default.NetworkPing,
-                    onClick = {
-                        isTesting = true
-                        onTest {
-                            isTesting = false
-                        }
-                    },
-                    variant = ButtonVariant.OUTLINE,
-                    loading = isTesting,
-                    height = 36.dp,
-                    testTag = "test_endpoint_btn_${endpoint.id}"
+                // Switch
+                Switch(
+                    checked = endpoint.enabled,
+                    onCheckedChange = { onToggle() },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = Color(0xFF111113),
+                        uncheckedThumbColor = colors.textSecondary,
+                        uncheckedTrackColor = colors.surfaceHighlight
+                    ),
+                    modifier = Modifier.testTag("toggle_endpoint_${endpoint.id}")
                 )
 
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    // Test Button (Ghost Pill)
+                    Box(
+                        modifier = Modifier
+                            .clip(WisfyShapes.Pill)
+                            .background(colors.surfaceHighlight)
+                            .border(1.dp, colors.border, WisfyShapes.Pill)
+                            .clickable(enabled = !isTesting) {
+                                isTesting = true
+                                onTest { isTesting = false }
+                            }
+                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                            .testTag("test_endpoint_btn_${endpoint.id}"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (isTesting) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(12.dp),
+                                strokeWidth = 1.5.dp,
+                                color = colors.textPrimary
+                            )
+                        } else {
+                            Text(
+                                text = "Test Ping",
+                                fontFamily = InterFontFamily,
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.textPrimary
+                            )
+                        }
+                    }
+
                     IconButton(onClick = onEdit) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Edit",
                             tint = colors.textSecondary,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(17.dp)
                         )
                     }
+
                     IconButton(onClick = onDelete) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Delete",
                             tint = ErrorRed,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(17.dp)
                         )
                     }
                 }

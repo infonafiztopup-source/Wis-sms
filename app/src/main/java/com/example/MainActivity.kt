@@ -6,7 +6,22 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import com.example.ui.components.AppEnteringSplash
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -66,6 +81,7 @@ import com.example.ui.screens.SmsFeedScreen
 import com.example.ui.screens.WelcomeScreen
 import com.example.ui.theme.EmeraldGreen
 import com.example.ui.theme.ObsidianBlack
+import com.example.ui.theme.PureBlack
 import com.example.ui.theme.PureWhite
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
@@ -132,6 +148,7 @@ fun WisfyAppRoot(viewModel: WisfyViewModel) {
     val failedCount by viewModel.failedCount.collectAsState()
     val totalCount by viewModel.totalLogsCount.collectAsState()
 
+    var showAppEnteringSplash by remember { mutableStateOf(true) }
     var onboardingStep by remember { mutableStateOf(OnboardingStep.WELCOME) }
     var currentTab by remember { mutableStateOf(NavigationTab.DASHBOARD) }
 
@@ -146,7 +163,11 @@ fun WisfyAppRoot(viewModel: WisfyViewModel) {
     // Check if onboarding completed from saved settings
     val isCompleted = settings?.hasCompletedOnboarding == true
 
-    if (!isCompleted && onboardingStep != OnboardingStep.COMPLETED) {
+    if (showAppEnteringSplash) {
+        AppEnteringSplash(
+            onFinished = { showAppEnteringSplash = false }
+        )
+    } else if (!isCompleted && onboardingStep != OnboardingStep.COMPLETED) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -190,7 +211,8 @@ fun WisfyAppRoot(viewModel: WisfyViewModel) {
                     onAddEndpointClick = {
                         endpointToEdit = null
                         showAddEndpointDialog = true
-                    }
+                    },
+                    onSettingsClick = { currentTab = NavigationTab.SETTINGS }
                 )
             },
             bottomBar = {
@@ -205,21 +227,34 @@ fun WisfyAppRoot(viewModel: WisfyViewModel) {
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-
                 androidx.compose.animation.AnimatedContent(
                     targetState = currentTab,
                     transitionSpec = {
                         val direction = targetState.ordinal > initialState.ordinal
-                        (androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(200)) +
-                                androidx.compose.animation.slideInHorizontally(
-                                    animationSpec = androidx.compose.animation.core.tween(240),
-                                    initialOffsetX = { if (direction) it / 6 else -it / 6 }
+                        (fadeIn(androidx.compose.animation.core.tween(200, easing = androidx.compose.animation.core.FastOutSlowInEasing)) +
+                                slideInHorizontally(
+                                    animationSpec = androidx.compose.animation.core.spring(
+                                        dampingRatio = 0.86f,
+                                        stiffness = 450f
+                                    ),
+                                    initialOffsetX = { if (direction) (it * 0.16f).toInt() else -(it * 0.16f).toInt() }
+                                ) +
+                                scaleIn(
+                                    initialScale = 0.97f,
+                                    animationSpec = androidx.compose.animation.core.tween(200, easing = androidx.compose.animation.core.FastOutSlowInEasing)
                                 ))
                             .togetherWith(
-                                androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(160)) +
-                                        androidx.compose.animation.slideOutHorizontally(
-                                            animationSpec = androidx.compose.animation.core.tween(200),
-                                            targetOffsetX = { if (direction) -it / 6 else it / 6 }
+                                fadeOut(androidx.compose.animation.core.tween(150, easing = androidx.compose.animation.core.FastOutSlowInEasing)) +
+                                        slideOutHorizontally(
+                                            animationSpec = androidx.compose.animation.core.spring(
+                                                dampingRatio = 0.86f,
+                                                stiffness = 450f
+                                            ),
+                                            targetOffsetX = { if (direction) -(it * 0.16f).toInt() else (it * 0.16f).toInt() }
+                                        ) +
+                                        scaleOut(
+                                            targetScale = 1.01f,
+                                            animationSpec = androidx.compose.animation.core.tween(150)
                                         )
                             )
                     },
@@ -348,147 +383,96 @@ fun WisfyBottomBar(
         modifier = Modifier
             .fillMaxWidth()
             .navigationBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .padding(bottom = 12.dp),
+        contentAlignment = Alignment.Center
     ) {
-        // Linear / Raycast Floating Glass Navigation
+        // Floating Solid Black Pill Navigation (Salung Reference: Black Pill with Sliding White Circle)
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .widthIn(min = 260.dp, max = 290.dp)
+                .fillMaxWidth(0.68f)
+                .height(64.dp)
                 .shadow(
-                    elevation = if (isDark) 14.dp else 8.dp,
-                    shape = RoundedCornerShape(26.dp),
-                    ambientColor = if (isDark) Color(0x60000000) else Color(0x18000000),
-                    spotColor = if (isDark) Color(0x80000000) else Color(0x20000000)
+                    elevation = 14.dp,
+                    shape = RoundedCornerShape(9999.dp),
+                    ambientColor = Color(0x66000000),
+                    spotColor = Color(0x80000000)
                 )
-                .clip(RoundedCornerShape(26.dp))
-                .background(com.example.ui.theme.LocalWisfyColors.current.surfaceElevated)
-                .border(
-                    1.dp,
-                    com.example.ui.theme.LocalWisfyColors.current.borderSubtle,
-                    RoundedCornerShape(26.dp)
-                )
-                .padding(horizontal = 8.dp, vertical = 6.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BottomNavItem(
-                    icon = Icons.Default.Dashboard,
-                    label = "Dashboard",
-                    isSelected = currentTab == NavigationTab.DASHBOARD,
-                    onClick = { onTabSelected(NavigationTab.DASHBOARD) },
-                    testTag = "nav_dashboard"
-                )
-
-                BottomNavItem(
-                    icon = Icons.Default.Sms,
-                    label = "SMS Feed",
-                    isSelected = currentTab == NavigationTab.SMS_FEED,
-                    onClick = { onTabSelected(NavigationTab.SMS_FEED) },
-                    testTag = "nav_sms_feed"
-                )
-
-                BottomNavItem(
-                    icon = Icons.Default.Webhook,
-                    label = "Endpoints",
-                    isSelected = currentTab == NavigationTab.ENDPOINTS,
-                    onClick = { onTabSelected(NavigationTab.ENDPOINTS) },
-                    testTag = "nav_endpoints"
-                )
-
-                BottomNavItem(
-                    icon = Icons.Default.Settings,
-                    label = "Settings",
-                    isSelected = currentTab == NavigationTab.SETTINGS,
-                    onClick = { onTabSelected(NavigationTab.SETTINGS) },
-                    testTag = "nav_settings"
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun BottomNavItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    testTag: String
-) {
-    val isDark = com.example.ui.theme.LocalWisfyColors.current.isDark
-
-    if (isSelected) {
-        // Active Capsule
-        Box(
-            modifier = Modifier
                 .clip(RoundedCornerShape(9999.dp))
-                .background(
-                    Brush.verticalGradient(
-                        if (isDark) {
-                            listOf(
-                                Color(0xFF10B981),
-                                Color(0xFF059669)
-                            )
-                        } else {
-                            listOf(
-                                Color(0xFF0F172A),
-                                Color(0xFF1E293B)
-                            )
-                        }
-                    )
-                )
+                .background(Color(0xFF000000))
                 .border(
                     1.dp,
-                    if (isDark) Color(0x3334D399) else Color(0x22FFFFFF),
+                    if (isDark) Color(0x2EFFFFFF) else Color(0x1AFFFFFF),
                     RoundedCornerShape(9999.dp)
                 )
-                .clickable(onClick = onClick)
-                .padding(horizontal = 14.dp, vertical = 8.dp)
-                .testTag(testTag)
+                .padding(horizontal = 8.dp),
+            contentAlignment = Alignment.CenterStart
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = label,
-                    tint = PureWhite,
-                    modifier = Modifier.size(17.dp)
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val totalWidth = maxWidth
+                val tabCount = 4
+                val tabWidth = totalWidth / tabCount
+                val activeCircleSize = 46.dp
+
+                // Sliding white circle indicator with spring physics
+                val targetOffsetX = tabWidth * currentTab.ordinal + (tabWidth - activeCircleSize) / 2
+                val animatedOffsetX by animateDpAsState(
+                    targetValue = targetOffsetX,
+                    animationSpec = spring(
+                        dampingRatio = 0.82f,
+                        stiffness = 420f
+                    ),
+                    label = "navCircleSlide"
                 )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = label,
-                    fontFamily = com.example.ui.theme.InterFontFamily,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = PureWhite
+
+                // White circle for active tab
+                Box(
+                    modifier = Modifier
+                        .offset(x = animatedOffsetX)
+                        .size(activeCircleSize)
+                        .clip(CircleShape)
+                        .background(Color(0xFFFFFFFF))
+                        .shadow(4.dp, CircleShape)
                 )
+
+                // 4 Interactive Tab Slots with testTags & contentDescriptions preserved
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val tabs = listOf(
+                        Triple(NavigationTab.DASHBOARD, Icons.Default.Dashboard, "nav_dashboard"),
+                        Triple(NavigationTab.SMS_FEED, Icons.Default.Sms, "nav_sms_feed"),
+                        Triple(NavigationTab.ENDPOINTS, Icons.Default.Webhook, "nav_endpoints"),
+                        Triple(NavigationTab.SETTINGS, Icons.Default.Settings, "nav_settings")
+                    )
+
+                    tabs.forEach { (tab, icon, tag) ->
+                        val isSelected = currentTab == tab
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                    onClick = { onTabSelected(tab) }
+                                )
+                                .testTag(tag),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = icon,
+                                contentDescription = tab.name.replace("_", " "),
+                                tint = if (isSelected) Color(0xFF000000) else Color(0xFF8E8E93),
+                                modifier = Modifier.size(22.dp)
+                            )
+                        }
+                    }
+                }
             }
-        }
-    } else {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .clip(RoundedCornerShape(14.dp))
-                .clickable(onClick = onClick)
-                .padding(horizontal = 12.dp, vertical = 6.dp)
-                .testTag(testTag)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = label,
-                tint = TextSecondary,
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = label,
-                fontFamily = com.example.ui.theme.InterFontFamily,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Medium,
-                color = TextSecondary
-            )
         }
     }
 }

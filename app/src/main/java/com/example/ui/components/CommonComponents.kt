@@ -7,6 +7,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
@@ -133,21 +134,21 @@ fun WisfyButton(
         ButtonVariant.PRIMARY -> {
             if (!enabled) {
                 Triple(
-                    SolidColor(if (isDark) Color(0xFF1E293B) else Color(0xFFE2E8F0)),
+                    SolidColor(if (isDark) Color(0xFF1E293B) else Color(0xFFE4E4E7)),
                     SolidColor(Color.Transparent),
-                    if (isDark) Color(0xFF64748B) else Color(0xFF94A3B8)
+                    if (isDark) Color(0xFF71717A) else Color(0xFFA1A1AA)
                 )
             } else {
                 Triple(
                     Brush.verticalGradient(
                         if (isDark) {
-                            listOf(Color(0xFF10B981), Color(0xFF059669))
+                            listOf(Color(0xFFFAFAFA), Color(0xFFE4E4E7))
                         } else {
-                            listOf(Color(0xFF0F172A), Color(0xFF1E293B))
+                            listOf(Color(0xFF09090B), Color(0xFF18181B))
                         }
                     ),
-                    SolidColor(Color.Transparent),
-                    PureWhite
+                    SolidColor(if (isDark) Color(0xFF27272A) else Color(0xFF09090B)),
+                    if (isDark) PureBlack else PureWhite
                 )
             }
         }
@@ -743,13 +744,13 @@ fun BrandTag(text: String, modifier: Modifier = Modifier) {
 @Composable
 fun WisfyBrandShape(
     modifier: Modifier = Modifier,
-    contentDescription: String? = "Wisfy Logo"
+    contentDescription: String? = "Wisfy Flame Logo"
 ) {
     val isDark = LocalWisfyColors.current.isDark
-    val resId = if (isDark) R.drawable.wisfy_shape_dark else R.drawable.wisfy_shape_light
-    Image(
-        painter = painterResource(id = resId),
+    Icon(
+        painter = painterResource(id = R.drawable.ic_wisfy_flame),
         contentDescription = contentDescription,
+        tint = if (isDark) PureWhite else Color(0xFF111113),
         modifier = modifier
     )
 }
@@ -773,3 +774,61 @@ fun WisfyLogoBadge(
 }
 
 private data class Quad<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
+
+/**
+ * Ultra-Smooth Shimmer Skeleton Loading Effect (Linear / Vercel monochrome style)
+ */
+@Composable
+fun Modifier.shimmerSkeleton(
+    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(8.dp)
+): Modifier {
+    val isDark = LocalWisfyColors.current.isDark
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val translateAnim by transition.animateFloat(
+        initialValue = -300f,
+        targetValue = 900f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1100, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "shimmerTranslate"
+    )
+
+    val shimmerColors = if (isDark) {
+        listOf(
+            Color(0xFF18181B),
+            Color(0xFF27272A),
+            Color(0xFF18181B)
+        )
+    } else {
+        listOf(
+            Color(0xFFF4F4F5),
+            Color(0xFFE4E4E7),
+            Color(0xFFF4F4F5)
+        )
+    }
+
+    val brush = Brush.linearGradient(
+        colors = shimmerColors,
+        start = androidx.compose.ui.geometry.Offset(translateAnim - 200f, translateAnim - 200f),
+        end = androidx.compose.ui.geometry.Offset(translateAnim, translateAnim)
+    )
+
+    return this
+        .clip(shape)
+        .background(brush)
+}
+
+@Composable
+fun WisfySkeletonCard(
+    modifier: Modifier = Modifier,
+    height: Dp = 72.dp,
+    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(14.dp)
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height)
+            .shimmerSkeleton(shape)
+    )
+}

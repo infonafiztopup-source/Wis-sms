@@ -117,3 +117,49 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
 )
+
+object WisfyTypography {
+    val HeroNumber = TextStyle(
+        fontFamily = InterFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 38.sp,
+        letterSpacing = (-1.0).sp
+    )
+    val ScreenTitle = TextStyle(
+        fontFamily = InterFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 22.sp,
+        letterSpacing = (-0.4).sp
+    )
+    val SectionTitle = TextStyle(
+        fontFamily = InterFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        letterSpacing = (-0.2).sp
+    )
+    val CardTitle = TextStyle(
+        fontFamily = InterFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp
+    )
+    val Body = TextStyle(
+        fontFamily = InterFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp
+    )
+    val Caption = TextStyle(
+        fontFamily = InterFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
+    )
+    val Chip = TextStyle(
+        fontFamily = InterFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp
+    )
+    val MonoTag = TextStyle(
+        fontFamily = JetBrainsMonoFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 11.sp
+    )
+}
